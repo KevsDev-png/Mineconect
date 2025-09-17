@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # Definir una ruta básica
 @app.route('/')
-def home():
+def rincipal():
     return "¡Hola, Flask está funcionando!"
 
 # Ejecutar la app
