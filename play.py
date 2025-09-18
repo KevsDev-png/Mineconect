@@ -1,4 +1,4 @@
-from flask import Flask 
+from flask import Flask, render_template
 
 # Crear la aplicación Flask
 app = Flask(__name__)  #variable app, va a recibir el parametro name que es elnombre del archivo que estamos parados 
@@ -6,7 +6,7 @@ app = Flask(__name__)  #variable app, va a recibir el parametro name que es elno
 # Definir una ruta básica, o urls apunta a una funcion que es la de abajo 
 @app.route('/') #Relaciona la app con la url (/ Raiz )
 def Principal():
-    return "¡Hola, Flask está funcionando!"
+    return render_template('Principal.html')
 
 # Ejecutar la app
 if __name__ == '__main__':
