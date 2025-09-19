@@ -1,0 +1,8 @@
+# Entornos virtuales
+/Virtual/
+
+# Archivos de cache de Python
+__pycache__/
+
+# Archivos de video grandes
+/static/videos/Video_Cluster720.mp4
