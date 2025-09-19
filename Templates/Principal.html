@@ -1,20 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>MINECONECT</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mineconect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Css/style.css') }}">
 </head>
 <body>
-    <h1>BIENVENIDO A MINECONECT</h1>
-    <p>Este contenio tiene un archivo HTML</p>
+    <div class="video-overlay"></div>
+    <div class="video-background">
+        <video autoplay loop muted playsinline>
+            <source src="{{ url_for('static', filename='Videos/Video_Cluster720.mp4') }}" type="video/mp4">
+            Tu navegador no soporta videos HTML5.
+        </video>
+    </div>
 
-    <nav>
-    <ul>
-        <a href="#" class="nav-link active" data-target="inicio">Inicio</a>
-        <a href="#" class="nav-link" data-target="nosotros">Nosotros</a>
-        <a href="#" class="nav-link" data-target="contacto">Contacto</a>
-        <a href="#" class="nav-link" data-target="login">Iniciar Sesion</a>
-        <a href="#" class="nav-link" data-target="register">Registrate</a>
-    </ul>
-    </nav>
+    <header class="main-header">
+        <nav class="main-nav">
+            <a href="/" class="logo">
+                <img src="{{ url_for('static', filename='Img/Min.png') }}" alt="Mineconect Logo">
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-button">INICIO</a></li>
+                <li><a href="#" class="nav-button">SOBRE NOSOTROS</a></li>
+                <li><a href="#" class="nav-button">CONTACTENOS</a></li>
+                <li><a href="#" class="nav-button">INICIAR SESION</a></li>
+                <li><a href="#" class="nav-button special">REGISTRATE</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h1>MINECONECT</h1>
+    </main>
+
 </body>
-</html> 
+</html>
