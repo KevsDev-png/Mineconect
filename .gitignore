@@ -1,0 +1,7 @@
+# Entornos virtuales
+/Virtual/
+
+# Archivos de cache de Python
+__pycache__/
+
+# Archivos de video grandes
