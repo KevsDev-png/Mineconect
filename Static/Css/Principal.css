@@ -359,6 +359,7 @@ html, body {
         top:261%; /* Centrado vertical */
         height:26rem ;
         transform: translateY(-50%); /* Ajuste fino para centrar verticalmente */
+        margin-right: -70px;
     }
     #titulouno{
         font-size: 1.2rem;
