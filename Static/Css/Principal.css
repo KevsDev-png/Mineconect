@@ -260,11 +260,16 @@ html, body {
             width: 100px;       /* Mantiene proporción */
         }
 
+        /* Oculta la imagen del divisor oscuro por defecto */
+        #divider-oscuro {
+            display: none;
+        }
+
         .Textouno{
             /* top: 20%; */
             /* position: relative; -> Evitar para el flujo normal del documento */
             text-align: justify;
-            margin-right: 20px;
+            margin-right: 30px;
             margin-left: 20px;
         }
 
@@ -273,7 +278,7 @@ html, body {
             /* position: relative; -> Evitar para el flujo normal del documento */
             text-align: justify;
             margin-right: 20px;
-            margin-left: 20px;
+            margin-left: 30px;
         }
 
         .img-izquierda {
@@ -318,12 +323,12 @@ html, body {
       left: -38px;
     }
     .Textouno {
-        font-size: 1rem; /* Ajustamos el tamaño del párrafo */
+        font-size: 1.2rem; /* Ajustamos el tamaño del párrafo */
         margin-right: 15%;
     }
 
     .Textodos {
-        font-size: 1rem; /* Ajustamos el tamaño del párrafo */
+        font-size: 1.2rem; /* Ajustamos el tamaño del párrafo */
     }
 
     .img-izquierda {
