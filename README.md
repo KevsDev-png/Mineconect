@@ -1,4 +1,5 @@
-<img align="left" alt="Min" width="300"  src="./Min.png"/>
+<img align="left" alt="Min" width="300"  src="./Static/Img/Min.png"/>
+
 
 <div align="justify">
   MINECONECT es una plataforma digital diseñada para conectar y potenciar a los actores clave del sector minero.<br>
