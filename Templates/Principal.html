@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='Css/Principal.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='Css/accessibility.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='Img/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='Css/modal.css') }}">
 </head>
 <body>
     <header class="main-header">
@@ -22,7 +23,7 @@
                 <li><a href="#sobre-nosotros" class="nav-button">SOBRE NOSOTROS</a></li>
                 <li><a href="#contactanos" class="nav-button">CONTACTENOS</a></li>
                 <li><a href="#" class="nav-button">INICIAR SESION</a></li>
-                <li><a href="#" class="nav-button special">REGISTRATE</a></li>
+                <li><a href="#" id="register-btn" class="nav-button special">REGISTRATE</a></li>
             </ul>
         </nav>
     </header>
@@ -121,7 +122,7 @@
 
 
 
-    <footer id="contactanos"class="main-footer-section">
+    <footer id="contactanos" class="main-footer-section">
         <div class="footer-container">
             <div class="footer-text footer-left">
                 <p>&copy; 2026 Mineconect</p>
@@ -141,7 +142,52 @@
                 </div>
             </div>
         </div>
+
+        <div class="footer-attributions" style="text-align: center; font-size: 12px; color: #ccc; padding: 15px 0;">
+            <p>Iconos utilizados en esta página:</p>
+            <a href="https://www.flaticon.es/iconos-gratis/institucion" title="institución iconos" style="color: #ccc;">Institución icono por zero_wing</a> |
+            <a href="https://www.flaticon.es/iconos-gratis/fabrica" title="fábrica iconos" style="color: #ccc;">Fábrica icono por Pixel perfect</a> |
+            <a href="https://www.flaticon.es/iconos-gratis/cohete" title="cohete iconos" style="color: #ccc;">Cohete icono por Freepik</a> |
+            <a href="https://www.flaticon.es/iconos-gratis/ganancias" title="ganancias iconos" style="color: #ccc;">Ganancias icono por Freepik</a>
+            <p>Todos via <a href="https://www.flaticon.es/" title="Flaticon" style="color: #ccc;">www.flaticon.es</a></p>
+        </div>
     </footer>
+
+    <div id="profile-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button class="close-btn" id="close-modal-btn">&times;</button>
+            <h2>Para Empezar, Cuentanos Quién Eres</h2>
+            <p>Selecciona el perfil que mejor te describa</p>
+
+            <div class="profile-options">
+    <div class="profile-card selected" data-profile="empresario">
+        <img src="{{ url_for('static', filename='Img/logo-empresario.png') }}" alt="Icono de Empresario">
+        <h3>Soy un Empresario</h3>
+        <p>Busco optimizar mi empresa y encontrar socios</p>
+    </div>
+
+    <div class="profile-card" data-profile="emprendedor">
+        <img src="{{ url_for('static', filename='Img/logo-emprendedor.png') }}" alt="Icono de Emprendedor">
+        <h3>Soy un Emprendedor SENA</h3>
+        <p>Tengo un proyecto y busco financiación o mentoría</p>
+    </div>
+
+    <div class="profile-card" data-profile="inversionista">
+        <img src="{{ url_for('static', filename='Img/logo-inversionista.png') }}" alt="Icono de Inversionista">
+        <h3>Soy un Inversionista</h3>
+        <p>Busco proyectos prometedores para invertir</p>
+    </div>
+
+    <div class="profile-card" data-profile="institucion">
+        <img src="{{ url_for('static', filename='Img/logo-institucion.png') }}" alt="Icono de Institución">
+        <h3>Soy una Institución</h3>
+        <p>Ofrezco programas, convocatorias o conocimiento</p>
+    </div>
+</div>
+
+            <button class="btn-primary">CONTINUAR</button>
+        </div>
+    </div>
    
  
 
@@ -190,5 +236,6 @@
    
    <script src="{{ url_for('static', filename='Js/sienna.js') }}"></script>
    <script src="{{ url_for('static', filename='Js/custom.js') }}"></script>
+   <script src="{{ url_for('static', filename='Js/main.js') }}"></script>
 </body>
 </html>
