@@ -32,6 +32,8 @@
     position: relative;
     transform: scale(1);
     transition: transform 0.3s ease;
+    max-height: 85vh;
+    overflow-y: auto
 }
 
 .modal-overlay.hidden .modal-content {
@@ -78,7 +80,7 @@
 }
 
 .profile-card img {
-    height: 48px;
+    height: 96px;
     margin-bottom: 15px;
 }
 
