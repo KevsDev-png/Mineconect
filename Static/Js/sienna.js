@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const h = function(e, s) {
         let a = !1;
         !s && e && (a = e.currentTarget, s = parseFloat(t.states.fontSize) || 1, a.classList.contains("asw-minus") ? s -= .1 : s += .1, s = Math.max(s, .1), s = Math.min(s, 2), s = parseFloat(s.toFixed(2))), document.querySelectorAll("h1,h2,h3,h4,h5,h6,p,a,dl,dt,li,ol,th,td,span").forEach((function(t) {
-            if (!t.classList.contains("material-icons")) {
+            if (!t.classList.contains("material-icons") && !t.matches(".main-content h1")) {
                 let e = t.getAttribute("data-asw-orgFontSize");
                 e || (e = parseInt(window.getComputedStyle(t, null).getPropertyValue("font-size")), t.setAttribute("data-asw-orgFontSize", e));
                 let a = e * s;
