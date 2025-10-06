@@ -43,4 +43,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- LÓGICA PARA EL BOTÓN CONTINUAR ---
+    const continueBtn = profileModal.querySelector('.btn-primary');
+
+    if (continueBtn) {
+        continueBtn.addEventListener('click', () => {
+            const selectedProfileCard = document.querySelector('.profile-card.selected');
+            if (selectedProfileCard) {
+                const profile = selectedProfileCard.dataset.profile;
+                // Redirigir a la página correspondiente
+                window.location.href = `/registro_${profile}`;
+            }
+        });
+    }
 });
