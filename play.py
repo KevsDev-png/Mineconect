@@ -14,6 +14,23 @@ def habeasdata():
     return render_template("Habeasdata.html")  # relaciona la app con el enlace en el html
 
 
+@app.route('/registro_emprendedor')
+def registro_emprendedor():
+    return render_template('Registro_emprendedor.html')
+
+@app.route('/registro_empresario')
+def registro_empresario():
+    return render_template('Registro_empresario.html')
+
+@app.route('/registro_institucion')
+def registro_institucion():
+    return render_template('Registro_institucion.html')
+
+@app.route('/registro_inversionista')
+def registro_inversionista():
+    return render_template('Registro_inversionista.html')
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0' ,port=84,debug= True) # Cualquier direccion puede acceder a la aplicacion 0.0.0.0
 
