@@ -122,10 +122,10 @@ html, body {
 
 .main-content h1 {
     color: white;
-    font-size: 8rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 5px;
+    font-size: 10vw;
 }
 
 /* ------------------------------
@@ -199,9 +199,7 @@ html, body {
 
     /* Título más pequeño */
     .main-content h1 {
-        font-size: 2rem;
-        letter-spacing: 2px;
-        padding: 0 15px;
+
     }
 
     .main-content {
@@ -308,7 +306,6 @@ html, body {
   /* --- Media Query para Laptops Pequeñas (ej. 14 pulgadas) --- */
 @media (max-width: 1400px) {
     .main-content h1 {
-        font-size: 2rem; /* Reducimos un poco el título principal */
         letter-spacing: 3px;
     }
 
