@@ -1,24 +1,21 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const buttonLabels = {
-        "Readable Font": "Fuente Legible",
-        "Highlight Links": "Resaltar Enlaces",
-        "Highlight Title": "Resaltar Título",
-        "Monochrome": "Monocromo",
-        "Low Saturation": "Baja Saturación",
-        "High Saturation": "Alta Saturación",
-        "High Contrast": "Alto Contraste",
-        "Light Contrast": "Bajo Contraste",
-        "Dark Contrast": "Contraste Oscuro",
-        "Big Cursor": "Cursor Grande",
-        "Stop Animations": "Detener Animaciones",
-        "Reading Guide": "Guía de Lectura"
-    };
+// Espera a que todo el contenido de la página se cargue
+document.addEventListener('DOMContentLoaded', function() {
 
-    document.querySelectorAll('.asw-btn').forEach(button => {
-        const key = button.querySelector('.material-icons').nextSibling.nodeValue.trim();
-        if (buttonLabels[key]) {
-            button.querySelector('.material-icons').nextSibling.nodeValue = buttonLabels[key];
+    // 1. Selecciona los elementos del DOM que necesitamos
+    const tipoDocumentoSelect = document.getElementById('tipo_documento');
+    const numeroDocumentoWrapper = document.getElementById('numero_documento_wrapper');
+
+    // 2. Escucha el evento 'change' en el selector de tipo de documento
+    tipoDocumentoSelect.addEventListener('change', function() {
+        
+        // 3. Comprueba si el usuario ha seleccionado una opción válida (no la primera que está deshabilitada)
+        if (tipoDocumentoSelect.value) {
+            // Si seleccionó algo, muestra el campo para el número de documento
+            numeroDocumentoWrapper.classList.remove('hidden');
+        } else {
+            // Si no, asegúrate de que el campo esté oculto
+            numeroDocumentoWrapper.classList.add('hidden');
         }
     });
-});
 
+});
