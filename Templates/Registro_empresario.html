@@ -61,6 +61,7 @@
 
         <div class="form-group">
             <label class="group-label">Tipo De Contribuyente</label>
+            
             <div class="radio-row-with-field">
                 <label class="radio-label">
                     <input type="radio" name="tipo_contribuyente" value="natural" required> 
@@ -71,6 +72,7 @@
                     <i class="fas fa-id-card icon-inside"></i>
                 </div>
             </div>
+
             <div class="radio-row-with-field">
                 <label class="radio-label">
                     <input type="radio" name="tipo_contribuyente" value="juridica"> 
@@ -155,5 +157,6 @@
     </form>
 </div>
 
+    <script src="{{ url_for('static', filename='Js/form-empresario.js') }}"></script>
 </body>
 </html>
