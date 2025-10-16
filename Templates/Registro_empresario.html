@@ -11,14 +11,14 @@
 
 <div class="form-container">
     <div class="form-header">
-        <img src="{{ url_for('static', filename='Img/logo-empresario.png') }}" alt="Icono de Empresa"> 
+        <img src="{{ url_for('static', filename='Img/icono-empresario.png') }}" alt="Icono de Empresa"> 
         <div class="form-header-text">
             <h1>CREA TU CUENTA DE EMPRESARIO</h1>
             <p>Ya casi eres parte del clúster. Solo necesitamos algunos datos.</p>
         </div>
     </div>
 
-    <form action="/ruta-del-backend" method="POST">
+    <form action="/ruta-del-backend" method="POST" id="registro-form">
 
         <h2 class="form-section-title">Información Personal <i class="fas fa-user"></i></h2>
         <div class="input-grid">
@@ -27,11 +27,11 @@
                 <i class="fas fa-user icon-inside"></i> 
             </div>
             <div class="input-wrapper">
-                <input type="email" placeholder="Correo" name="correo" required>
+                <input type="email" placeholder="Correo" name="correo" required id="correo">
                 <i class="fas fa-envelope icon-inside"></i>
             </div>
             <div class="input-wrapper">
-                <input type="password" placeholder="Contraseña" name="contrasena" required>
+                <input type="password" placeholder="Contraseña" name="contrasena" required id="contrasena">
                 <i class="fas fa-lock icon-inside"></i>
             </div>
             <div class="input-wrapper">
