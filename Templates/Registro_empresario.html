@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crea tu Cuenta de Empresario</title>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='Css/form-empresario.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
 </head>
@@ -12,17 +11,18 @@
 
 <div class="form-container">
     <div class="form-header">
-        <img src="{{ url_for('static', filename='Img/factory-icon.png') }}" alt="Icono de Empresa"> 
+        <img src="{{ url_for('static', filename='Img/logo-empresario.png') }}" alt="Icono de Empresa"> 
         <div class="form-header-text">
             <h1>CREA TU CUENTA DE EMPRESARIO</h1>
-            <p>Ya casi eres parte del clúster. Solo necesitamos algunos datos</p>
+            <p>Ya casi eres parte del clúster. Solo necesitamos algunos datos.</p>
         </div>
     </div>
 
     <form action="/ruta-del-backend" method="POST">
 
         <h2 class="form-section-title">Información Personal <i class="fas fa-user"></i></h2>
-        <div class="input-grid"> <div class="input-wrapper">
+        <div class="input-grid">
+            <div class="input-wrapper">
                 <input type="text" placeholder="Nombre Completo" name="nombre_completo" required>
                 <i class="fas fa-user icon-inside"></i> 
             </div>
@@ -34,8 +34,9 @@
                 <input type="password" placeholder="Contraseña" name="contrasena" required>
                 <i class="fas fa-lock icon-inside"></i>
             </div>
-            <div id="tipo_documento_wrapper" class="input-wrapper">
-                <select id="tipo_documento" name="tipo_documento" required>
+
+            <div class="input-wrapper">
+                <select name="tipo_documento_personal" required>
                     <option value="" disabled selected>Tipo de documento</option>
                     <option value="CC">Cédula de Ciudadanía (CC)</option>
                     <option value="CE">Cédula de Extranjería (CE)</option>
@@ -43,12 +44,10 @@
                 </select>
                 <i class="fas fa-chevron-down icon-inside"></i>
             </div>
-
-            <div id="numero_documento_wrapper" class="input-wrapper hidden">
-                <input type="text" placeholder="Número de documento" name="numero_documento" required>
+            <div class="input-wrapper">
+                <input type="text" placeholder="Número de documento" name="numero_documento_personal" required>
                 <i class="fas fa-id-card icon-inside"></i>
             </div>
-
             <div class="input-wrapper">
                 <input type="tel" placeholder="Número de celular" name="numero_celular" required>
                 <i class="fas fa-phone icon-inside"></i>
@@ -56,60 +55,88 @@
         </div>
 
         <h2 class="form-section-title">Información De La Empresa <i class="fas fa-building"></i></h2>
-        <div class="input-wrapper">
+        <div class="input-wrapper full-width">
             <input type="text" placeholder="Nombre De La Empresa" name="nombre_empresa" required>
             <i class="fas fa-building icon-inside"></i>
         </div>
 
-        <div class="radio-group">
-            <h3>Tipo De Contribuyente</h3>
-            <label><input type="radio" name="contribuyente" value="natural" checked> Persona Natural</label>
-            <label><input type="radio" name="contribuyente" value="juridica"> Persona Juridica</label>
+        <div class="form-group">
+            <label class="group-label">Tipo De Contribuyente</label>
+            <div class="radio-group-horizontal">
+                <label><input type="radio" name="tipo_contribuyente" value="natural" required> Persona Natural</label>
+                <label><input type="radio" name="tipo_contribuyente" value="juridica"> Persona Jurídica</label>
+            </div>
         </div>
 
-        <div class="radio-group">
-            <h3>Tamaño De La Empresa</h3>
-            <label><input type="radio" name="tamano" value="pequena" checked> Pequeña</label>
-            <label><input type="radio" name="tamano" value="mediana"> Mediana</label>
-            <label><input type="radio" name="tamano" value="grande"> Grande</label>
+        <div id="conditional-fields-wrapper" class="input-wrapper full-width hidden">
+            <input type="text" id="numero-documento" name="numero_documento" placeholder="Número de documento">
+            <i class="fas fa-id-card icon-inside"></i>
+        </div>
+        
+        <div class="form-group">
+            <label class="group-label">Tamaño De La Empresa</label>
+            <div class="radio-group-horizontal">
+                <label><input type="radio" name="tamano" value="pequena" checked> Pequeña</label>
+                <label><input type="radio" name="tamano" value="mediana"> Mediana</label>
+                <label><input type="radio" name="tamano" value="grande"> Grande</label>
+            </div>
         </div>
 
-        <div class="radio-group">
-            <h3>Etapa De Encadenamiento</h3>
-            <label><input type="radio" name="etapa" value="produccion" checked> Produccion</label>
-            <label><input type="radio" name="etapa" value="transformacion"> Transformacion</label>
-            <label><input type="radio" name="etapa" value="comercializacion"> Comercializacion</label>
+        <div class="form-group">
+            <label class="group-label">Etapa De Encadenamiento</label>
+            <div class="radio-group-horizontal">
+                <label><input type="radio" name="etapa" value="produccion" checked> Producción</label>
+                <label><input type="radio" name="etapa" value="transformacion"> Transformación</label>
+                <label><input type="radio" name="etapa" value="comercializacion"> Comercialización</label>
+            </div>
         </div>
 
-        <h3>Sector De Operacion</h3>
-        <div class="select-row">
-            <select name="sector_1">
-                <option value="produccion">Produccion</option>
-                <option value="transformacion">Transformacion</option>
-                <option value="comercializacion">Comercializacion</option>
-            </select>
-            <select name="sector_2">
-                <option value="transformacion">Transformacion</option>
-                <option value="produccion">Produccion</option>
-                <option value="comercializacion">Comercializacion</option>
-            </select>
-            <select name="sector_3">
-                <option value="comercializacion">Comercializacion</option>
-                <option value="produccion">Produccion</option>
-                <option value="transformacion">Transformacion</option>
-            </select>
+        <div class="form-group">
+            <label class="group-label">Sector De Operación</label>
+            <div class="select-row">
+                <select name="sector_1">
+                    <option value="produccion">Producción</option>
+                    <option value="transformacion">Transformación</option>
+                    <option value="comercializacion">Comercialización</option>
+                </select>
+                <select name="sector_2">
+                    <option value="transformacion">Transformación</option>
+                    <option value="produccion">Producción</option>
+                    <option value="comercializacion">Comercialización</option>
+                </select>
+                <select name="sector_3">
+                    <option value="comercializacion">Comercialización</option>
+                    <option value="produccion">Producción</option>
+                    <option value="transformacion">Transformación</option>
+                </select>
+            </div>
         </div>
 
         <div class="agreement-group">
             <input type="checkbox" id="terminos" name="terminos" required>
-            <label for="terminos">Acepto Los Terminos y Condiciones</label>
+            <label for="terminos">Acepto Los Términos y Condiciones</label>
         </div>
 
         <button type="submit" class="submit-button">FINALIZAR REGISTRO</button>
     </form>
 </div>
 
-<script src="{{ url_for('static', filename='Js/custom.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tipoContribuyenteRadios = document.querySelectorAll('input[name="tipo_contribuyente"]');
+        const conditionalWrapper = document.getElementById('conditional-fields-wrapper');
+
+        tipoContribuyenteRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'natural') {
+                    conditionalWrapper.classList.remove('hidden');
+                } else {
+                    conditionalWrapper.classList.add('hidden');
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
