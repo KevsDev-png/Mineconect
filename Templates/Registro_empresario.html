@@ -34,7 +34,6 @@
                 <input type="password" placeholder="Contraseña" name="contrasena" required>
                 <i class="fas fa-lock icon-inside"></i>
             </div>
-
             <div class="input-wrapper">
                 <select name="tipo_documento_personal" required>
                     <option value="" disabled selected>Tipo de documento</option>
@@ -62,20 +61,26 @@
 
         <div class="form-group">
             <label class="group-label">Tipo De Contribuyente</label>
-            <div class="radio-group-horizontal">
-                <label><input type="radio" name="tipo_contribuyente" value="natural" required> Persona Natural</label>
-                <label><input type="radio" name="tipo_contribuyente" value="juridica"> Persona Jurídica</label>
+            <div class="radio-row-with-field">
+                <label class="radio-label">
+                    <input type="radio" name="tipo_contribuyente" value="natural" required> 
+                    Persona Natural
+                </label>
+                <div id="conditional-natural-wrapper" class="conditional-input input-wrapper hidden">
+                    <input type="text" id="numero-documento" name="numero_documento" placeholder="Número de documento">
+                    <i class="fas fa-id-card icon-inside"></i>
+                </div>
             </div>
-        </div>
-
-        <div id="conditional-natural-wrapper" class="input-wrapper full-width hidden">
-            <input type="text" id="numero-documento" name="numero_documento" placeholder="Número de documento">
-            <i class="fas fa-id-card icon-inside"></i>
-        </div>
-
-        <div id="conditional-juridica-wrapper" class="input-wrapper full-width hidden">
-            <input type="text" id="nit" name="nit" placeholder="NIT (Número de Identificación Tributaria)">
-            <i class="fas fa-id-card icon-inside"></i>
+            <div class="radio-row-with-field">
+                <label class="radio-label">
+                    <input type="radio" name="tipo_contribuyente" value="juridica"> 
+                    Persona Jurídica
+                </label>
+                <div id="conditional-juridica-wrapper" class="conditional-input input-wrapper hidden">
+                    <input type="text" id="nit" name="nit" placeholder="NIT (Número de Identificación Tributaria)">
+                    <i class="fas fa-id-card icon-inside"></i>
+                </div>
+            </div>
         </div>
         
         <div class="form-group">
@@ -89,30 +94,91 @@
 
         <div class="form-group">
             <label class="group-label">Etapa De Encadenamiento</label>
-            <div class="radio-group-horizontal">
-                <label><input type="radio" name="etapa" value="produccion" checked> Producción</label>
-                <label><input type="radio" name="etapa" value="transformacion"> Transformación</label>
-                <label><input type="radio" name="etapa" value="comercializacion"> Comercialización</label>
+            <div class="select-row">
+                
+                <select name="etapa_produccion" required>
+                    <option value="" disabled selected>Producción</option>
+                    <option value="licencias_exploracion">Licencias de Exploración</option>
+                    <option value="exploracion_terrenos">Exploración de Terrenos</option>
+                    <option value="perforacion">Perforación</option>
+                    <option value="voladura">Voladura</option>
+                    <option value="descapote">Descapote</option>
+                    <option value="remocion_materiales">Remoción de Materiales</option>
+                    <option value="proveedores_insumos">Proveedores de Insumos Actividades Extractivas</option>
+                    <option value="maquinaria_equipos">Maquinaria y Equipos de Operación</option>
+                    <option value="servicios_ingenieria">Servicios Especializados de Ingeniería y Beneficio</option>
+                    <option value="instrumentos_control">Instrumentos de Control y Automatización de Procesos</option>
+                    <option value="servicios_seguridad">Prestación de Servicios de Seguridad</option>
+                </select>
+                
+                <select name="etapa_transformacion" required>
+                    <option value="" disabled selected>Transformación</option>
+                    <option value="extraccion">Extracción</option>
+                    <option value="triturado">Triturado</option>
+                    <option value="lavado">Lavado</option>
+                    <option value="secado">Secado</option>
+                    <option value="clasificacion">Clasificación</option>
+                    <option value="centros_acopio">Centros de Acopio</option>
+                    <option value="cargue_descargue">Cargue y Descargue</option>
+                    <option value="puertos_vias">Puertos y Vías Férreas</option>
+                    <option value="industrializacion">Industrialización</option>
+                    <option value="recuperacion_valores">Recuperación de Valores y Coquizado</option>
+                    <option value="manejo_desechos">Manejo de Desechos Sólidos y Líquidos</option>
+                </select>
+                
+                <select name="etapa_comercializacion" required>
+                    <option value="" disabled selected>Comercialización</option>
+                    <option value="mercadeo_productos">Mercadeo de Productos y Subproductos</option>
+                    <option value="servicio_laboratorio">Servicio de Laboratorio y Certificaciones</option>
+                    <option value="minoristas">Minoristas</option>
+                    <option value="mayoristas">Mayoristas</option>
+                    <option value="exportadores">Exportadores</option>
+                    <option value="usos_finales">Usos Finales (Metalúrgica, Automotriz, etc.)</option>
+                </select>
             </div>
         </div>
 
         <div class="form-group">
             <label class="group-label">Sector De Operación</label>
             <div class="select-row">
-                <select name="sector_1">
-                    <option value="produccion">Producción</option>
-                    <option value="transformacion">Transformación</option>
-                    <option value="comercializacion">Comercialización</option>
+                <select name="sector_produccion" required>
+                    <option value="" disabled selected>Actividades de Producción</option>
+                    <option value="licencias_exploracion">Licencias de Exploración</option>
+                    <option value="exploracion_terrenos">Exploración de Terrenos</option>
+                    <option value="perforacion">Perforación</option>
+                    <option value="voladura">Voladura</option>
+                    <option value="descapote">Descapote</option>
+                    <option value="remocion_materiales">Remoción de Materiales</option>
+                    <option value="proveedores_insumos">Proveedores de Insumos Actividades Extractivas</option>
+                    <option value="maquinaria_equipos">Maquinaria y Equipos de Operación</option>
+                    <option value="servicios_ingenieria">Servicios Especializados de Ingeniería y Beneficio</option>
+                    <option value="instrumentos_control">Instrumentos de Control y Automatización de Procesos</option>
+                    <option value="servicios_seguridad">Prestación de Servicios de Seguridad</option>
                 </select>
-                <select name="sector_2">
-                    <option value="transformacion">Transformación</option>
-                    <option value="produccion">Producción</option>
-                    <option value="comercializacion">Comercialización</option>
+                
+                <select name="sector_transformacion" required>
+                    <option value="" disabled selected>Actividades de Transformación</option>
+                    <option value="extraccion">Extracción</option>
+                    <option value="triturado">Triturado</option>
+                    <option value="lavado">Lavado</option>
+                    <option value="secado">Secado</option>
+                    <option value="clasificacion">Clasificación</option>
+                    <option value="centros_acopio">Centros de Acopio</option>
+                    <option value="cargue_descargue">Cargue y Descargue</option>
+                    <option value="puertos_vias">Puertos y Vías Férreas</option>
+                    <option value="industrializacion">Industrialización</option>
+                    <option value="recuperacion_valores">Recuperación de Valores y Coquizado</option>
+                    <option value="manejo_desechos">Manejo de Desechos Sólidos y Líquidos</option>
                 </select>
-                <select name="sector_3">
-                    <option value="comercializacion">Comercialización</option>
-                    <option value="produccion">Producción</option>
-                    <option value="transformacion">Transformación</option>
+                
+                <select name="sector_comercializacion" required>
+                    <option value="" disabled selected>Actividades de Comercialización</option>
+                    <option value="mercadeo_productos">Mercadeo de Productos y Subproductos</option>
+                    <option value="servicio_laboratorio">Servicio de Laboratorio y Certificaciones</option>
+                    <option value="minoristas">Minoristas</option>
+                    <option value="mayoristas">Mayoristas</option>
+                    <option value="exportadores">Exportadores</option>
+                    <option value="usos_finales">Usos Finales (Metalúrgica, Automotriz, etc.)</option>
                 </select>
             </div>
         </div>
@@ -125,23 +191,6 @@
         <button type="submit" class="submit-button">FINALIZAR REGISTRO</button>
     </form>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const tipoContribuyenteRadios = document.querySelectorAll('input[name="tipo_contribuyente"]');
-        const conditionalWrapper = document.getElementById('conditional-fields-wrapper');
-
-        tipoContribuyenteRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                if (this.value === 'natural') {
-                    conditionalWrapper.classList.remove('hidden');
-                } else {
-                    conditionalWrapper.classList.add('hidden');
-                }
-            });
-        });
-    });
-</script>
 
 </body>
 </html>

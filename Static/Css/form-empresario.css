@@ -1,4 +1,4 @@
-/* Static/Css/form-empresario.css */
+/* Static/Css/form-empresario.css - VERSIÓN CORREGIDA */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
 * {
@@ -23,7 +23,7 @@ body {
     border-radius: 12px;
     padding: 30px 40px;
     width: 100%;
-    max-width: 800px; /* Un poco más de espacio */
+    max-width: 800px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
@@ -68,7 +68,7 @@ body {
 
 .input-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Grid responsivo */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px;
 }
 
@@ -77,11 +77,13 @@ body {
 }
 
 .input-wrapper.full-width {
-    grid-column: 1 / -1; /* Hace que el campo ocupe todo el ancho del grid */
+    margin-top: 15px;
 }
 
+/* === REGLA UNIFICADA PARA TODOS LOS INPUTS Y SELECTS === */
 .input-wrapper input,
-.input-wrapper select {
+.input-wrapper select,
+.select-row select {
     width: 100%;
     padding: 12px 40px 12px 15px;
     border: 1px solid #d0d0d0;
@@ -90,10 +92,20 @@ body {
     background-color: white;
     transition: border-color 0.2s;
     appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23888888' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+}
+
+/* Para los inputs, quitamos la flecha de fondo */
+.input-wrapper input {
+    background-image: none;
 }
 
 .input-wrapper input:focus,
-.input-wrapper select:focus {
+.select-row select:focus {
     outline: none;
     border-color: #F39C12;
 }
@@ -104,9 +116,9 @@ body {
     top: 50%;
     transform: translateY(-50%);
     color: #888;
+    pointer-events: none; /* Asegura que se pueda hacer clic en el select */
 }
 
-/* Estilos unificados para grupos de opciones */
 .form-group {
     margin-top: 20px;
     padding-top: 15px;
@@ -121,10 +133,40 @@ body {
     margin-bottom: 12px;
 }
 
+.radio-row-with-field {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.radio-row-with-field .radio-label {
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+    cursor: pointer;
+    flex-shrink: 0;
+    width: 180px;
+}
+
+.radio-row-with-field .radio-label input[type="radio"] {
+     margin-right: 8px;
+     accent-color: #F39C12;
+     transform: scale(1.1);
+}
+
+.radio-row-with-field .conditional-input {
+    flex-grow: 1;
+}
+
+.conditional-input.hidden {
+    display: none;
+}
+
 .radio-group-horizontal {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    flex-direction: column; /* Apila las opciones verticalmente */
+    gap: 12px; /* Ajusta el espacio vertical */
 }
 
 .radio-group-horizontal label {
@@ -146,17 +188,7 @@ body {
 }
 
 .select-row select {
-    flex: 1;
-    padding: 10px 15px;
-    border: 1px solid #d0d0d0;
-    border-radius: 8px;
-    background-color: white;
-    cursor: pointer;
-    font-size: 0.9em;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23888888' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
+    flex: 1; /* Esto asegura que se distribuyan el espacio */
 }
 
 .agreement-group {
@@ -198,6 +230,16 @@ body {
 @media (max-width: 768px) {
     .form-container {
         padding: 20px;
+    }
+    .input-grid {
+        grid-template-columns: 1fr;
+    }
+    .radio-row-with-field {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .radio-row-with-field .conditional-input {
+        width: 100%;
     }
     .select-row {
         flex-direction: column;
