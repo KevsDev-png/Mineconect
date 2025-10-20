@@ -22,7 +22,7 @@
                 <li><a href="/" class="nav-button">INICIO</a></li>
                 <li><a href="#sobre-nosotros" class="nav-button">SOBRE NOSOTROS</a></li>
                 <li><a href="#contactanos" class="nav-button">CONTACTENOS</a></li>
-                <li><a href="#" class="nav-button">INICIAR SESION</a></li>
+                <li><a href="#" id="iniciar" class="nav-button">INICIAR SESION</a></li>
                 <li><a href="#" id="register-btn" class="nav-button special">REGISTRATE</a></li>
             </ul>
         </nav>
@@ -180,7 +180,77 @@
             <button class="btn-primary">CONTINUAR</button>
         </div>
     </div>
-   
+
+    <!-- Modal de Inicio de Sesión -->
+    <div id="login-modal" class="modal-overlay hidden">
+        <div class="login-modal-container">
+            <!-- Pantalla de bienvenida (opcional, se puede quitar si no se desea) -->
+            <div class="welcome-screen">
+                <div class="welcome-text">Bienvenido al Cluster Minero</div>
+            </div>
+
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <div class="logo-container">
+                    <!-- Logo animado -->
+                    <img src="{{ url_for('static', filename='Videos/Bucle-unscreen.gif') }}" alt="Logo animado" class="login-logo">
+                </div>
+            </div>
+
+            <!-- Login Section -->
+            <div class="login-section">
+                <button class="close-btn" id="close-login-modal-btn">&times;</button>
+
+                <!-- Vista de Inicio de Sesión -->
+                <div id="login-view">
+                    <h1 class="login-title">INICIAR SESIÓN</h1>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <input type="email" id="login-email" placeholder="Correo Electronico" required>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-wrapper">
+                                <input type="password" id="login-password" placeholder="Contraseña" required maxlength="8">
+                                <button type="button" class="password-toggle" onclick="toggleLoginPassword()">
+                                    <svg class="eye-icon" id="login-eye-icon" viewBox="0 0 24 24">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="forgot-password">
+                            <a href="#">¿Olvidaste tu contraseña?</a>
+                        </div>
+                        <button type="submit" class="iniciar-sesion-btn">Iniciar sesión</button>
+                    </form>
+                </div>
+
+                <!-- Vista de Verificación de Código (oculta por defecto) -->
+                <div id="verification-view" style="display: none;">
+                    <button type="button" id="back-to-login-btn" class="back-btn" title="Volver a inicio de sesión">&larr;</button>
+                    <h1 class="login-title">Verificación de Código</h1>
+                    <p class="verification-subtitle">Hemos enviado un código de verificación al correo<br><strong id="verification-email-display"></strong></p>
+                    <form id="verificationForm">
+                        <div class="form-group">
+                            <div class="verification-code-inputs" id="verification-code-container">
+                                <input type="number" class="code-input" min="0" max="9" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="1" required>
+                                <input type="number" class="code-input" min="0" max="9" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="1" required>
+                                <input type="number" class="code-input" min="0" max="9" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="1" required>
+                                <input type="number" class="code-input" min="0" max="9" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="1" required>
+                                <input type="number" class="code-input" min="0" max="9" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="1" required>
+                                <input type="number" class="code-input" min="0" max="9" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="1" required>
+                           </div>
+                        </div>
+                        <button type="submit" class="submit-btn">Verificar e Iniciar Sesión</button>
+                        <div class="resend-code">
+                            <a href="#">¿No recibiste el código? Reenviar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
  
 
     <script>
@@ -214,20 +284,10 @@
         });
     </script>
 
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.getElementById('menu-toggle');
-            const navMenu = document.getElementById('nav-menu');
-
-            menuToggle.addEventListener('click', function() {
-                navMenu.classList.toggle('active');
-            });
-        });
-    </script>
-   
    <script src="{{ url_for('static', filename='Js/sienna.js') }}"></script>
    <script src="{{ url_for('static', filename='Js/custom.js') }}"></script>
    <script src="{{ url_for('static', filename='Js/main.js') }}"></script>
+   <script src="{{ url_for('static', filename='Js/auth.js') }}"></script>
+   
 </body>
 </html>
