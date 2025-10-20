@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <form action="/ruta-backend-emprendedor" method="POST" id="registro-emprendedor-form">
+    <form action="{{ url_for('registro_emprendedor') }}" method="POST" id="registro-emprendedor-form">
 
         <h2 class="form-section-title">Información Personal <i class="fas fa-user"></i></h2>
         <div class="input-grid">
@@ -45,7 +45,7 @@
                 <i class="fas fa-chevron-down icon-inside"></i>
             </div>
             <div class="input-wrapper">
-                <input type="tel" placeholder="Número de celular" name="numero_celular" required id="celular-emprendedor">
+<input type="tel" placeholder="Número de celular" name="numero_celular" required id="celular-emprendedor" maxlength="10" pattern="[0-9]*" inputmode="numeric">
                 <i class="fas fa-phone icon-inside"></i>
             </div>
              <div class="input-wrapper">
@@ -81,6 +81,8 @@
         <button type="submit" class="submit-button">FINALIZAR REGISTRO</button>
     </form>
 </div>
+
+<script src="{{ url_for('static', filename='Js/form-emprendedor.js') }}"></script>
 
 </body>
 </html>
