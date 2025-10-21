@@ -424,9 +424,14 @@
         overflow-y: auto; /* Permite scroll si el contenido no cabe */
     }
 
-    /* Ocultar la sección del logo en móviles para más espacio */
+    /* Ajustar la sección del logo en móviles en lugar de ocultarla */
     .logo-section {
-        display: none;
+        padding: 30px 20px; /* Reducir el padding para móviles */
+        order: -1; /* Asegura que el logo se mantenga arriba */
+    }
+
+    .login-logo {
+        width: 150px; /* Hacemos el logo más pequeño en móviles */
     }
 
     .login-section {
@@ -441,13 +446,43 @@
         font-size: 16px;
     }
 
+    .verification-code-inputs {
+        gap: 8px; /* Reducimos el espacio entre inputs */
+        margin-bottom: 25px; /* Menos margen inferior */
+    }
+
     .verification-code-inputs input {
-        width: 45px; /* Reducimos el tamaño de los inputs */
-        height: 50px;
-        font-size: 22px;
+        width: 40px; /* Reducimos más el tamaño de los inputs */
+        height: 48px;
+        font-size: 20px;
     }
     /* Resetea el margen del botón de login para centrarlo correctamente en móviles */
     .login-section .submit-btn {
         margin-left: 0;
+    }
+
+    /* Mejora la visibilidad y posición de los botones de control en móviles */
+    .close-btn, .back-btn {
+        color: white; /* Asegura que sean visibles sobre el fondo verde */
+        opacity: 0.8;
+        transition: opacity 0.2s;
+    }
+
+    .close-btn {
+        right: 20px; /* Reduce el espacio desde el borde */
+    }
+
+    .close-btn:hover, .back-btn:hover {
+        opacity: 1;
+    }
+
+    .login-title{
+        margin-top: 8%;
+    }
+
+    .login-section .submit-btn{
+        width: 90%; /* Hacemos el botón un poco más estrecho que el 100% */
+        max-width: 231px; /* Un máximo para que no se estire demasiado */
+        margin-left: 12%;
     }
 }
