@@ -38,7 +38,8 @@
                     </div>
                     <div>
                         <label>NIT</label>
-                        <input type="text" placeholder="Ej:846245394-2" id="nit" required maxlength="11">
+                        <input type="text" placeholder="Ej:8462453942" id="nit" required maxlength="10">
+                        <p id="nit-error" class="error-message"></p>
                     </div>
                 </div>
 
@@ -51,6 +52,7 @@
                             required 
                             id="email" 
                             onblur="validarCorreo(this.value)">
+                        <p id="email-error" class="error-message"></p>
                     </div>
                     <div>
                         <label>Contraseña</label>
@@ -59,14 +61,14 @@
                             <button type="button" class="toggle-password" onclick="togglePassword()" aria-label="Mostrar u ocultar contraseña">
                                 <i id="eye-icon" class="fa-solid fa-eye-slash"></i>
                             </button>
-                            <p id="password-error" style="color: red; font-size: 0.8em; display: none; margin-top: 5px;"></p>
+                            <p id="password-error" class="error-message"></p>
                         </div>
                     </div>
                 </div>
 
                 <div style="margin-bottom: 15px;">
                     <label>Tipo De Institución</label>
-                    <div class="radio-group">
+                    <div class="radio-group vertical">
                         <div class="radio-option">
                             <input type="radio" name="tipo" id="universidad" value="universidad" required>
                             <label for="universidad" style="margin: 0;">Universidad</label>
@@ -223,7 +225,7 @@
 
            <div class="sector">
                 <h2 class="sector-titulo">Áreas De Especialización <i class="fa-solid fa-star"></i></h2>
-                 <div class="radio-group">
+                 <div class="radio-group vertical">
                         <div class="radio-option">
                             <input type="radio" name="especializacion" id="asesoria" value="asesoria" required>
                             <label for="asesoria">Asesoría Técnica</label>
@@ -240,7 +242,7 @@
            </div>
             <div class="sector">
                 <h2 class="sector-titulo">Participación Activa <i class="fa-solid fa-people-group"></i></h2>
-                <div class="checkbox-group">
+                <div class="checkbox-group vertical">
                     <div class="checkbox-option">
                         <input type="checkbox" id="interaccion" value="interaccion">
                         <label for="interaccion" style="margin: 0;">Interacción Con La Comunidad</label>
@@ -252,6 +254,7 @@
                     <div class="checkbox-option">
                         <input type="checkbox" id="analisis" value="analisis">
                         <label for="analisis" style="margin: 0;">Análisis De Impacto</label>
+                        <p id="participacion-error" class="error-message"></p>
                     </div>
                 </div>
             </div>

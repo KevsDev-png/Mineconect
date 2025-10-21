@@ -1,7 +1,80 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // --- Funcionalidad para mostrar/ocultar contraseña ---
-    const togglePasswordButton = document.querySelector('.toggle-password');
+    let stylesInjected = false;
 
+    /**
+     * Inyecta los estilos CSS para las notificaciones en el <head> del documento.
+     * Se ejecuta solo una vez para evitar duplicados.
+     */
+    function injectNotificationStyles() {
+        if (stylesInjected) return;
+
+        const style = document.createElement('style');
+        style.textContent = `
+            .custom-notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 8px;
+                color: white;
+                background-color: #333; /* Default/Info */
+                z-index: 20000;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                opacity: 0;
+                transform: translateX(100%);
+                transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+                font-family: Arial, sans-serif;
+                font-size: 15px;
+                max-width: 350px;
+            }
+            .custom-notification.error { background-color: #d9534f; }
+            .custom-notification.success { background-color: #5cb85c; }
+            .custom-notification.show {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            /* Estilos responsivos para pantallas pequeñas */
+            @media (max-width: 600px) {
+                .custom-notification {
+                    left: 10px;
+                    right: 10px;
+                    top: 10px;
+                    max-width: none;
+                    width: auto;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        stylesInjected = true;
+    }
+
+    /**
+     * Muestra una notificación no bloqueante en la pantalla.
+     * @param {string} message - El mensaje a mostrar.
+     * @param {string} type - El tipo de notificación ('error', 'success', 'info').
+     */
+    function showNotification(message, type = 'error') {
+        injectNotificationStyles(); // Asegura que los estilos estén presentes
+
+        const notification = document.createElement('div');
+        notification.textContent = message;
+        notification.className = `custom-notification ${type}`; // Asigna clases base y de tipo
+
+        document.body.appendChild(notification);
+
+        // Animación de entrada y salida
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            // Espera a que termine la transición de salida para eliminar el elemento
+            notification.addEventListener('transitionend', () => notification.remove(), { once: true });
+        }, 5000); // La notificación dura 5 segundos
+    }
+
+    // --- Funcionalidad para mostrar/ocultar contraseña ---
     // Hacemos la función global para que el `onclick` del HTML la encuentre por ahora.
     // Lo ideal sería manejar el evento 'click' aquí directamente.
     window.togglePassword = function() {
@@ -31,9 +104,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const expReg = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
         const esValido = expReg.test(email);
        
-        if (email && !esValido) { // Solo muestra la alerta si hay texto y no es válido.
-            alert("El correo no es válido, por favor ingrese un correo válido.");
-            // Opcional: enfocar el campo de nuevo si es inválido
+        if (email && !esValido) { // Solo muestra la notificación si hay texto y no es válido.
+            showNotification("El correo no es válido, por favor ingrese un correo válido.", 'error');
+            // Opcional: enfocar el campo de nuevo
             if (emailInput) {
                 emailInput.focus();
             }
@@ -46,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
         passwordInput.addEventListener('blur', function() {
             const password = this.value;
             if (password && !validarContraseña(password)) {
-                alert('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial: !@#$%^&*._-');
+                showNotification('La contraseña debe tener 8 caracteres, mayúscula, minúscula, número y un símbolo !@#$%^&*._-', 'error');
             }
         });
     }
@@ -67,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!etapaChecked) {
                 event.preventDefault();
-                alert('Por favor, selecciona al menos una etapa de proyecto en la que inviertes.');
+                showNotification('Por favor, selecciona al menos una etapa de proyecto en la que inviertes.', 'error');
                 etapasCheckboxes[0].focus();
                 return; // Detiene la validación si esta falla
             }
@@ -78,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!areaChecked) {
                 event.preventDefault();
-                alert('Por favor, selecciona al menos un área de interés.');
+                showNotification('Por favor, selecciona al menos un área de interés.', 'error');
                 areasCheckboxes[0].focus();
             }
         });
@@ -95,8 +168,8 @@ document.addEventListener('DOMContentLoaded', function () {
             numeroDocumentoInput.value = ''; // Limpiar el campo al cambiar de tipo
 
             if (tipo === 'NIT') {
-                numeroDocumentoInput.placeholder = 'Ej: 900123456-7';
-                numeroDocumentoInput.maxLength = 11;
+                numeroDocumentoInput.placeholder = 'Ej: 9001234567';
+                numeroDocumentoInput.maxLength = 10;
             } else if (tipo === 'CC' || tipo === 'CE') {
                 numeroDocumentoInput.placeholder = 'Ej: 1023456789';
                 numeroDocumentoInput.maxLength = 10;
@@ -118,9 +191,9 @@ document.addEventListener('DOMContentLoaded', function () {
             let mensajeError = '';
 
             if (tipo === 'NIT') {
-                // Expresión regular para NIT colombiano: 9 o 10 dígitos, opcionalmente con guion y dígito de verificación.
-                esValido = /^\d{9,10}(?:-\d{1})?$/.test(numero);
-                mensajeError = 'El NIT no es válido. Debe contener 9 o 10 dígitos y opcionalmente un guion y dígito verificador.';
+                // Expresión regular para NIT colombiano: 10 dígitos numéricos.
+                esValido = /^\d{10}$/.test(numero); // Valida exactamente 10 dígitos numéricos
+                mensajeError = 'El NIT no es válido. Debe contener 10 dígitos sin guiones ni puntos.';
             } else if (tipo === 'CC' || tipo === 'CE') {
                 // Cédulas suelen tener entre 7 y 10 dígitos numéricos.
                 esValido = /^\d{7,10}$/.test(numero);
@@ -128,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (tipo && !esValido) { // Solo validar si se ha seleccionado un tipo
-                alert(mensajeError);
+                showNotification(mensajeError, 'error');
                 this.focus();
             }
         });

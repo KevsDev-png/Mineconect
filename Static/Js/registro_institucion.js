@@ -1,17 +1,80 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // --- Funcionalidad para mostrar/ocultar contraseña ---
-    const togglePasswordButton = document.querySelector('.toggle-password');
-    // La función togglePassword se define aquí para que esté disponible en el listener.
-    // No es necesario adjuntarla con addEventListener si se usa onclick en el HTML,
-    // pero es mejor práctica mantener todo el JS aquí.
-    // El HTML ya tiene onclick="togglePassword()", pero lo ideal sería quitarlo
-    // y manejarlo aquí. Por ahora, lo dejamos para no romper la funcionalidad existente.
-    if (togglePasswordButton) {
-        // El HTML ya tiene un onclick, así que esta línea es redundante.
-        // togglePasswordButton.addEventListener('click', togglePassword);
+    let stylesInjected = false;
+
+    /**
+     * Inyecta los estilos CSS para las notificaciones en el <head> del documento.
+     * Se ejecuta solo una vez para evitar duplicados.
+     */
+    function injectNotificationStyles() {
+        if (stylesInjected) return;
+
+        const style = document.createElement('style');
+        style.textContent = `
+            .custom-notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 8px;
+                color: white;
+                background-color: #333; /* Default/Info */
+                z-index: 20000;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                opacity: 0;
+                transform: translateX(100%);
+                transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+                font-family: Arial, sans-serif;
+                font-size: 15px;
+                max-width: 350px;
+            }
+            .custom-notification.error { background-color: #d9534f; }
+            .custom-notification.success { background-color: #5cb85c; }
+            .custom-notification.show {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            /* Estilos responsivos para pantallas pequeñas */
+            @media (max-width: 600px) {
+                .custom-notification {
+                    left: 10px;
+                    right: 10px;
+                    top: 10px;
+                    max-width: none;
+                    width: auto;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        stylesInjected = true;
     }
-    
-    // Hacemos la función global para que el `onclick` del HTML la encuentre.
+
+    /**
+     * Muestra una notificación no bloqueante en la pantalla.
+     * @param {string} message - El mensaje a mostrar.
+     * @param {string} type - El tipo de notificación ('error', 'success', 'info').
+     */
+    function showNotification(message, type = 'error') {
+        injectNotificationStyles(); // Asegura que los estilos estén presentes
+
+        const notification = document.createElement('div');
+        notification.textContent = message;
+        notification.className = `custom-notification ${type}`; // Asigna clases base y de tipo
+
+        document.body.appendChild(notification);
+
+        // Animación de entrada y salida
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            // Espera a que termine la transición de salida para eliminar el elemento
+            notification.addEventListener('transitionend', () => notification.remove(), { once: true });
+        }, 5000); // La notificación dura 5 segundos
+    }
+
+    // --- Funcionalidad para mostrar/ocultar contraseña ---
     window.togglePassword = function() {
         const passwordInput = document.getElementById('password');
         const eyeIcon = document.getElementById('eye-icon');
@@ -36,8 +99,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!isChecked) {
                 event.preventDefault(); // Previene el envío del formulario
-                alert('Por favor, selecciona al menos un área de participación activa.'); // Muestra una alerta
-                checkboxes[0].focus(); // Enfoca el primer checkbox para guiar al usuario
+                showNotification('Por favor, selecciona al menos un área de participación activa.', 'error');
+                checkboxes[0].focus();
             }
         });
     }
@@ -49,8 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const esValido = expReg.test(email);
        
         if (email && !esValido) { // Solo muestra la alerta si hay texto y no es válido.
-            alert("El correo no es válido, por favor ingrese un correo válido.");
-            // Opcional: enfocar el campo de nuevo si es inválido
+            showNotification("El correo no es válido. Por favor, ingrese un correo válido.", 'error');
             const emailInput = document.getElementById('email');
             if (emailInput) {
                 emailInput.focus();
@@ -65,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
         passwordInput.addEventListener('blur', function() {
             const password = this.value;
             if (password && !validarContraseña(password)) {
-                alert('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial que son los siguientes: !@#$%^&*._-');
+                showNotification('La contraseña debe tener 8+ caracteres, mayúscula, minúscula, número y un símbolo !@#$%^&*._-', 'error');
             }
         });
     }
@@ -77,8 +139,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function validarNIT(nit) {
-        // Expresión regular para un NIT colombiano: 9 o 10 dígitos, opcionalmente con guion y dígito de verificación.
-        const expRegNIT = /^\d{9,11}(?:-\d{1})?$/;
+        // Expresión regular para un NIT colombiano: 10 dígitos sin guion.
+        const expRegNIT = /^\d{10}$/;
         return expRegNIT.test(nit);
     }
 
@@ -88,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
         nitInput.addEventListener('blur', function() {
             const nit = this.value;
             if (nit && !validarNIT(nit)) {
-                alert('El NIT no es válido. Debe tener 9 o 10 dígitos, opcionalmente seguido de un guion y el dígito de verificación.');
+                showNotification('El NIT no es válido. Debe contener 10 dígitos numéricos, sin guiones ni puntos.', 'error');
             }
         });
     }

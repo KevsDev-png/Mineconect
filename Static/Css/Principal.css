@@ -197,10 +197,6 @@ html, body {
         cursor: pointer;
     }
 
-    /* Título más pequeño */
-    .main-content h1 {
-
-    }
 
     .main-content {
         padding-top: 100px;
@@ -253,7 +249,7 @@ html, body {
 
         .divider img {
             position: relative; /* lo sube 50px exactos */
-            top: -4%;
+            top: 4%;
             height: 117%;/* Ajusta el tamaño según necesites */
             width: 100px;       /* Mantiene proporción */
         }
