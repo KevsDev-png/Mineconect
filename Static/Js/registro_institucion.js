@@ -147,6 +147,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- Validación de NIT ---
     const nitInput = document.getElementById('nit');
     if (nitInput) {
+        // Evento para permitir solo la entrada de números en tiempo real
+        nitInput.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
         nitInput.addEventListener('blur', function() {
             const nit = this.value;
             if (nit && !validarNIT(nit)) {

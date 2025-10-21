@@ -130,6 +130,16 @@ document.addEventListener('DOMContentLoaded', function () {
         return expReg.test(password);
     }
 
+    // --- Validación para solo números en celular y documento ---
+    const celularInput = document.getElementById('numeroCelular');
+    if (celularInput) {
+        celularInput.addEventListener('input', function() {
+            // Elimina cualquier caracter que no sea un dígito
+            this.value = this.value.replace(/\D/g, '');
+        });
+    }
+
+
     // --- Validación para requerir al menos un checkbox ---
     const form = document.getElementById('investorForm');
     if (form) {
@@ -162,6 +172,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const numeroDocumentoInput = document.getElementById('numeroDocumento');
 
     if (tipoDocumentoSelect && numeroDocumentoInput) {
+        // Evento para permitir solo la entrada de números en tiempo real
+        numeroDocumentoInput.addEventListener('input', function() {
+            // Elimina cualquier caracter que no sea un dígito
+            this.value = this.value.replace(/\D/g, '');
+        });
+
         // 1. Cambiar el placeholder y maxlength al seleccionar un tipo de documento
         tipoDocumentoSelect.addEventListener('change', function() {
             const tipo = this.value;
