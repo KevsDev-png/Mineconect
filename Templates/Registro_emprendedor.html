@@ -24,11 +24,11 @@
         <h2 class="form-section-title">Información Personal <i class="fas fa-user"></i></h2>
         <div class="input-grid">
             <div class="input-wrapper">
-                <input type="text" placeholder="Nombre Completo" name="nombre_completo" required>
+                <input type="text" placeholder="Nombre Completo" name="nombre_completo" required maxlength="30">
                 <i class="fas fa-user icon-inside"></i> 
             </div>
             <div class="input-wrapper">
-                <input type="email" placeholder="Correo" name="correo" required id="correo-emprendedor">
+                <input type="email" placeholder="Correo" name="correo" required id="correo-emprendedor" maxlength="30">
                 <i class="fas fa-envelope icon-inside"></i>
             </div>
             <div class="input-wrapper">
@@ -44,6 +44,10 @@
                     <option value="PP">Pasaporte (PP)</option>
                 </select>
                 <i class="fas fa-chevron-down icon-inside"></i>
+            </div>
+            <div class="input-wrapper">
+                <input type="text" placeholder="Número de documento" name="numero_documento" required maxlength="30">
+                <i class="fas fa-id-card icon-inside"></i>
             </div>
             <div class="input-wrapper">
 <input type="tel" placeholder="Número de celular" name="numero_celular" required id="celular-emprendedor" maxlength="10" pattern="[0-9]*" inputmode="numeric">
