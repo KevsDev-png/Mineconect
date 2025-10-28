@@ -228,6 +228,31 @@
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
 }
 
+/* Estilos para el nuevo select de perfil */
+.login-section select {
+    max-width: 350px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 14px 40px 14px 20px; /* Espacio extra a la derecha para la flecha */
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+    color: #333; /* Color de texto estándar */
+    background-color: white;
+    cursor: pointer;
+    /* Quitar la apariencia nativa del select */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* Añadir una flecha personalizada */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23666' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
+    transition: all 0.3s ease;
+}
+
 .password-toggle {
     position: absolute;
     right: 15px;
@@ -306,6 +331,25 @@
     transition: transform 0.2s, box-shadow 0.3s;
     box-shadow: 0 4px 15px rgba(240, 168, 85, 0.3);
 }
+
+/* Botón para la vista de recuperación de contraseña */
+.recovery-btn {
+    max-width: 350px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #f0a855 0%, #e89a3f 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0 4px 15px rgba(240, 168, 85, 0.3);
+    margin-top: 10px; /* Añadimos un pequeño margen superior */
+}
+
 
 /* --- Estilos para el formulario de verificación de código --- */
 
