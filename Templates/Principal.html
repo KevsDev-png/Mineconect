@@ -209,6 +209,15 @@
                             <input type="email" id="login-email" placeholder="Correo Electronico" required>
                         </div>
                         <div class="form-group">
+                            <select id="login-profile" name="profile" required>
+                                <option value="" disabled selected>Selecciona tu perfil</option>
+                                <option value="empresario">Empresario</option>
+                                <option value="emprendedor">Emprendedor</option>
+                                <option value="inversionista">Inversionista</option>
+                                <option value="institucion">Institución</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <div class="input-wrapper">
                                 <input type="password" id="login-password" placeholder="Contraseña" required maxlength="8">
                                 <button type="button" class="password-toggle" onclick="toggleLoginPassword()">
@@ -219,8 +228,9 @@
                                 </button>
                             </div>
                         </div>
+
                         <div class="forgot-password">
-                            <a href="#">¿Olvidaste tu contraseña?</a>
+                            <a href="#" id="forgot-password-link">¿Olvidaste tu contraseña?</a>
                         </div>
                         <button type="submit" class="iniciar-sesion-btn">Iniciar sesión</button>
                     </form>
@@ -246,6 +256,19 @@
                         <div class="resend-code">
                             <a href="#">¿No recibiste el código? Reenviar</a>
                         </div>
+                    </form>
+                </div>
+
+                <!-- Vista de Recuperar Contraseña (oculta por defecto) -->
+                <div id="recovery-view" style="display: none;">
+                    <button type="button" id="back-to-login-from-recovery-btn" class="back-btn" title="Volver a inicio de sesión">&larr;</button>
+                    <h1 class="login-title">Recuperar Contraseña</h1>
+                    <p class="verification-subtitle">Ingresa tu correo electrónico y te enviaremos las instrucciones para restablecer tu contraseña.</p>
+                    <form id="recoveryForm">
+                        <div class="form-group">
+                            <input type="email" id="recovery-email" placeholder="Correo Electrónico" required>
+                        </div>
+                        <button type="submit" class="recovery-btn">Enviar Instrucciones</button>
                     </form>
                 </div>
             </div>

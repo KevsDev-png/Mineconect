@@ -47,10 +47,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const backToLoginBtn = document.getElementById('back-to-login-btn'); // El botón para volver al login.
         const emailInput = document.getElementById('login-email'); // El campo para escribir el email.
         const emailDisplay = document.getElementById('verification-email-display'); // Donde se muestra el email ofuscado.
+        
+        // Elementos para el flujo de recuperación de contraseña parte del modal de login
+        const recoveryView = document.getElementById('recovery-view');
+        const forgotPasswordLink = document.getElementById('forgot-password-link');
+        const backToLoginFromRecoveryBtn = document.getElementById('back-to-login-from-recovery-btn');
 
         // Comprueba si todos los elementos fueron encontrados. Si falta alguno, detiene la función.
-        if (!loginForm || !loginView || !verificationView || !backToLoginBtn || !emailInput || !emailDisplay) {
-            console.warn('No se encontraron todos los elementos para el flujo de autenticación.');
+        if (!loginForm || !loginView || !verificationView || !backToLoginBtn || !emailInput || !emailDisplay || !recoveryView || !forgotPasswordLink || !backToLoginFromRecoveryBtn) {
+            console.warn('No se encontraron todos los elementos para el flujo de autenticación y recuperación.');
             return; // Termina la ejecución de esta función.
         }
 
@@ -106,6 +111,21 @@ document.addEventListener('DOMContentLoaded', () => {
             verificationView.style.display = 'none';
             // Muestra de nuevo la vista de inicio de sesión.
             loginView.style.display = 'block';
+        });
+
+        // Añade un "escuchador" al enlace de "¿Olvidaste tu contraseña?". parte del modal de login
+        forgotPasswordLink.addEventListener('click', (event) => {
+            event.preventDefault(); // Previene que el enlace recargue la página.
+            // Oculta la vista de inicio de sesión.
+            loginView.style.display = 'none';
+            // Muestra la vista de recuperación de contraseña.
+            recoveryView.style.display = 'block';
+        });
+
+        // Añade un "escuchador" al botón de "volver" en la vista de recuperación.
+        backToLoginFromRecoveryBtn.addEventListener('click', () => {
+            recoveryView.style.display = 'none'; // Oculta la vista de recuperación.
+            loginView.style.display = 'block'; // Muestra la vista de inicio de sesión.
         });
     }
 

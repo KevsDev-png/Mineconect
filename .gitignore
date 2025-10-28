@@ -1,7 +1,56 @@
-# Entornos virtuales
-/Virtual/
+# ==========================
+# ARCHIVOS DE ENTORNO Y SEGURIDAD
+# ==========================
+.env
+.env.*
+*.env
+instance/
+secrets.json
 
-# Archivos de cache de Python
+# ==========================
+# ARCHIVOS DE PYTHON / FLASK
+# ==========================
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
 
-# Archivos de video grandes
+# Ignorar migraciones si se regeneran automáticamente
+migrations/
+
+# ==========================
+# ENTORNOS VIRTUALES
+# ==========================
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+Virtual/
+
+# ==========================
+# ARCHIVOS DE VISUAL STUDIO CODE
+# ==========================
+.vscode/
+.vscode/*
+*.code-workspace
+
+# ==========================
+# ARCHIVOS DEL SISTEMA
+# ==========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==========================
+# OTROS ARCHIVOS TEMPORALES
+# ==========================
+*.bak
+*.swp
+*.tmp
+*.old
+*.orig
