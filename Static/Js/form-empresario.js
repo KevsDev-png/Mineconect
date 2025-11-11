@@ -115,7 +115,6 @@ document.addEventListener('DOMContentLoaded', function() {
              }
 
             // --- 3. ENVIAR FORMULARIO ---
-            alert("¡Formulario validado con éxito!"); 
             form.submit(); 
         });
     }
