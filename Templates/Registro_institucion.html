@@ -24,7 +24,7 @@
 
         <p class="subtitulo">Ya casi eres parte del clúster. Solo necesitamos algunos datos</p>
 
-        <form>
+        <form action="{{ url_for('registro_institucion') }}" method="POST">
             <div class="sector">
                 <h2 class="sector-titulo">
                     Información De La Institución
@@ -34,30 +34,38 @@
                 <div class="form-row">
                     <div>
                         <label>Nombre De La Institución</label>
-                        <input type="text" placeholder="Nombre" required maxlength="30">
+                        <input type="text" name="nombre_institucion" placeholder="Nombre" required maxlength="150" value="{{ form_data.nombre_institucion if form_data }}">
                     </div>
                     <div>
                         <label>NIT</label>
-                        <input type="text"placeholder="Ej:8462453942" id="nit" required maxlength="10">
-                        <p id="nit-error" class="error-message"></p>
+                        <input type="text" name="nit" placeholder="Ej:8462453942" id="nit" required maxlength="10" value="{{ form_data.nit if form_data }}">
+                        {% if errors and errors.nit %}
+                            <p class="error-message" style="display: block;">{{ errors.nit }}</p>
+                        {% else %}
+                            <p id="nit-error" class="error-message"></p>
+                        {% endif %}
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div>
                         <label for="email">Correo</label>
-                        <input 
+                        <input
                             type="email" 
-                            placeholder="ejemplo@correo.com" 
-                            required 
-                            id="email" 
+                            name="correo"
+                            placeholder="ejemplo@correo.com" required value="{{ form_data.correo if form_data }}"
+                            id="email"
                             onblur="validarCorreo(this.value)">
-                        <p id="email-error" class="error-message"></p>
+                        {% if errors and errors.correo %}
+                            <p class="error-message" style="display: block;">{{ errors.correo }}</p>
+                        {% else %}
+                            <p id="email-error" class="error-message"></p>
+                        {% endif %}
                     </div>
                     <div>
                         <label>Contraseña</label>
                         <div class="password-wrapper">
-                            <input type="password" id="password" placeholder="Minimo 8 caracteres" required maxlength="8">
+                            <input type="password" name="contrasena" id="password" placeholder="Minimo 8 caracteres" required minlength="8">
                             <button type="button" class="toggle-password" onclick="togglePassword()" aria-label="Mostrar u ocultar contraseña">
                                 <i id="eye-icon" class="fa-solid fa-eye-slash"></i>
                             </button>
@@ -70,19 +78,19 @@
                     <label>Tipo De Institución</label>
                     <div class="radio-group vertical">
                         <div class="radio-option">
-                            <input type="radio" name="tipo" id="universidad" value="universidad" required>
+                            <input type="radio" name="tipo_institucion" id="universidad" value="universidad" required>
                             <label for="universidad" style="margin: 0;">Universidad</label>
                         </div>
                         <div class="radio-option">
-                            <input type="radio" name="tipo" id="entidad" value="entidad">
+                            <input type="radio" name="tipo_institucion" id="entidad" value="entidad">
                             <label for="entidad" style="margin: 0;">Entidad Financiera</label>
                         </div>
                         <div class="radio-option">
-                            <input type="radio" name="tipo" id="gremios" value="gremios">
+                            <input type="radio" name="tipo_institucion" id="gremios" value="gremios">
                             <label for="gremios" style="margin: 0;">Gremios</label>
                         </div>
                         <div class="radio-option">
-                            <input type="radio" name="tipo" id="agencia" value="agencia">
+                            <input type="radio" name="tipo_institucion" id="agencia" value="agencia">
                             <label for="agencia" style="margin: 0;">Agencia Gubernamental</label>
                         </div>
                     </div>
@@ -90,7 +98,7 @@
 
                 <div style="margin-bottom: 15px;">
                     <label>Municipio</label>
-                <select required >
+                <select name="municipio" required>
                     <option value="">Seleccionar</option>
                     <option value="almeida">Almeida</option>
                     <option value="aquitania">Aquitania</option>
@@ -219,7 +227,7 @@
 
                 <div>
                     <label>Descripción de su misión y los servicios que ofrece en el sector</label>
-                    <textarea placeholder="Descripción de su misión y los servicios que ofrece en el sector" required maxlength="100" ></textarea>
+                    <textarea name="descripcion" placeholder="Descripción de su misión y los servicios que ofrece en el sector" required maxlength="500"></textarea>
                 </div>
             </div>
 
@@ -227,15 +235,15 @@
                 <h2 class="sector-titulo">Áreas De Especialización <i class="fa-solid fa-star"></i></h2>
                  <div class="radio-group vertical">
                         <div class="radio-option">
-                            <input type="radio" name="especializacion" id="asesoria" value="asesoria" required>
+                            <input type="radio" name="area_especializacion" id="asesoria" value="asesoria_tecnica" required>
                             <label for="asesoria">Asesoría Técnica</label>
                         </div>
                         <div class="radio-option">
-                            <input type="radio" name="especializacion" id="programas" value="programas">
+                            <input type="radio" name="area_especializacion" id="programas" value="programas_capacitacion">
                             <label for="programas">Programas de Capacitación</label>
                         </div>
                         <div class="radio-option">
-                            <input type="radio" name="especializacion" id="lineas" value="lineas">
+                            <input type="radio" name="area_especializacion" id="lineas" value="lineas_credito">
                             <label for="lineas">Líneas de Crédito</label>
                         </div>
             </div>
@@ -244,15 +252,15 @@
                 <h2 class="sector-titulo">Participación Activa <i class="fa-solid fa-people-group"></i></h2>
                 <div class="checkbox-group vertical">
                     <div class="checkbox-option">
-                        <input type="checkbox" id="interaccion" value="interaccion">
+                        <input type="checkbox" name="participacion_activa" id="interaccion" value="interaccion_comunidad">
                         <label for="interaccion" style="margin: 0;">Interacción Con La Comunidad</label>
                     </div>
                     <div class="checkbox-option">
-                        <input type="checkbox" id="banco" value="banco">
+                        <input type="checkbox" name="participacion_activa" id="banco" value="banco_proyectos">
                         <label for="banco" style="margin: 0;">Banco De Proyectos</label>
                     </div>
                     <div class="checkbox-option">
-                        <input type="checkbox" id="analisis" value="analisis">
+                        <input type="checkbox" name="participacion_activa" id="analisis" value="analisis_impacto">
                         <label for="analisis" style="margin: 0;">Análisis De Impacto</label>
                         <p id="participacion-error" class="error-message"></p>
                     </div>
@@ -261,7 +269,7 @@
 
             <div class="sector terms">
                 <div class="checkbox-option">
-                    <input type="checkbox" id="terminos" required>
+                    <input type="checkbox" name="terminos" id="terminos" required>
                     Acepto los<a href="{{ url_for('habeasdata') }}" style="text-decoration: underline; color: blue; margin-left: -6px;">Términos y Condiciones</a>
                 </div>
             </div>

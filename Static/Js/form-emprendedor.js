@@ -77,8 +77,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!terminos) { alert("Debe aceptar los Términos y Condiciones."); return; }
 
             // --- 4. SI TODO ESTÁ BIEN, ENVIAR EL FORMULARIO ---
-            alert("¡Formulario de emprendedor validado con éxito!"); 
-            form.submit();
+            // Si todas las validaciones pasan, se elimina el preventDefault y se envía el formulario.
+            // Ya no es necesario el alert ni llamar a form.submit() manualmente.
+            event.target.submit();
         });
     }
 });
