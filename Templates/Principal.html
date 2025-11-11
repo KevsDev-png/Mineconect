@@ -204,9 +204,9 @@
                 <!-- Vista de Inicio de Sesión -->
                 <div id="login-view">
                     <h1 class="login-title">INICIAR SESIÓN</h1>
-                    <form id="loginForm">
+                    <form id="loginForm" action="{{ url_for('login') }}" method="POST">
                         <div class="form-group">
-                            <input type="email" id="login-email" placeholder="Correo Electronico" required>
+                            <input type="email" id="login-email" name="email" placeholder="Correo Electronico" required>
                         </div>
                         <div class="form-group">
                             <select id="login-profile" name="profile" required>
@@ -219,7 +219,7 @@
                         </div>
                         <div class="form-group">
                             <div class="input-wrapper">
-                                <input type="password" id="login-password" placeholder="Contraseña" required maxlength="8">
+                                <input type="password" id="login-password" name="password" placeholder="Contraseña" required maxlength="8">
                                 <button type="button" class="password-toggle" onclick="toggleLoginPassword()">
                                     <svg class="eye-icon" id="login-eye-icon" viewBox="0 0 24 24">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
