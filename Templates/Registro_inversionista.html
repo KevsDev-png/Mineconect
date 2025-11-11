@@ -21,7 +21,7 @@
         </div>
         <p class="subtitulo">Ya casi eres parte del clúster. Solo necesitamos algunos datos.</p>
 
-        <form id="investorForm">
+        <form id="investorForm" action="{{ url_for('registro_inversionista') }}" method="POST">
             <!-- Información Personal -->
             <div class="sector">
                 <h2 class="sector-titulo">Información Personal <i class="fa-solid fa-user-tie"></i></h2>

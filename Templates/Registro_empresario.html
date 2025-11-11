@@ -19,7 +19,12 @@
         </div>
     </div>
 
-    <form action="/ruta-del-backend" method="POST" id="registro-form">
+    <!-- 
+      ¡CAMBIO IMPORTANTE AQUÍ! 
+      Cambiamos action="/ruta-del-backend" por action="{{ url_for('registro_empresario') }}"
+      Esto le dice al formulario que envíe los datos a tu función de Python.
+    -->
+    <form action="{{ url_for('registro_empresario') }}" method="POST" id="registro-form">
 
         <h2 class="form-section-title">Información Personal <i class="fas fa-user"></i></h2>
         <div class="input-grid">
@@ -45,7 +50,7 @@
                 <i class="fas fa-chevron-down icon-inside"></i>
             </div>
             <div class="input-wrapper">
-                <input type="text" placeholder="Número de documento" name="numero_documento_personal" required maxlength="30">
+                <input type="text" placeholder="Número de documento" name="numero_documento_personal" required maxlength="11">
                 <i class="fas fa-id-card icon-inside"></i>
             </div>
             <div class="input-wrapper">
@@ -69,7 +74,8 @@
                     Persona Natural
                 </label>
                 <div id="conditional-natural-wrapper" class="conditional-input input-wrapper hidden">
-                    <input type="text" id="numero-documento" name="numero_documento" placeholder="Número de documento">
+                    <!-- El name="numero_documento" coincide con el 'play.py' -->
+                    <input type="text" id="numero-documento" name="numero_documento" placeholder="Número de documento" maxlength="11">
                     <i class="fas fa-id-card icon-inside"></i>
                 </div>
             </div>
@@ -80,6 +86,7 @@
                     Persona Jurídica
                 </label>
                 <div id="conditional-juridica-wrapper" class="conditional-input input-wrapper hidden">
+                    <!-- El name="nit" coincide con el 'play.py' -->
                     <input type="text" id="nit" name="nit" placeholder="NIT (Número de Identificación Tributaria)">
                     <i class="fas fa-id-card icon-inside"></i>
                 </div>
@@ -104,51 +111,53 @@
             </div>
         </div>
 
+
+
         <div class="form-group">
-            <label class="group-label">Sector De Operación</label>
-            <div class="select-row">
-                
-                <select name="sector_produccion" required>
-                    <option value="" disabled selected>Exploración</option>
-                    <option value="licencias_exploracion">Licencias de Exploración</option>
-                    <option value="exploracion_terrenos">Exploración de Terrenos</option>
-                    <option value="perforacion">Perforación</option>
-                    <option value="voladura">Voladura</option>
-                    <option value="descapote">Descapote</option>
-                    <option value="remocion_materiales">Remoción de Materiales</option>
-                    <option value="proveedores_insumos">Proveedores de Insumos Actividades Extractivas</option>
-                    <option value="maquinaria_equipos">Maquinaria y Equipos de Operación</option>
-                    <option value="servicios_ingenieria">Servicios Especializados de Ingeniería y Beneficio</option>
-                    <option value="instrumentos_control">Instrumentos de Control y Automatización de Procesos</option>
-                    <option value="servicios_seguridad">Prestación de Servicios de Seguridad</option>
-                </select>
-                
-                <select name="sector_transformacion" required>
-                    <option value="" disabled selected>Transformación</option>
-                    <option value="extraccion">Extracción</option>
-                    <option value="triturado">Triturado</option>
-                    <option value="lavado">Lavado</option>
-                    <option value="secado">Secado</option>
-                    <option value="clasificacion">Clasificación</option>
-                    <option value="centros_acopio">Centros de Acopio</option>
-                    <option value="cargue_descargue">Cargue y Descargue</option>
-                    <option value="puertos_vias">Puertos y Vías Férreas</option>
-                    <option value="industrializacion">Industrialización</option>
-                    <option value="recuperacion_valores">Recuperación de Valores y Coquizado</option>
-                    <option value="manejo_desechos">Manejo de Desechos Sólidos y Líquidos</option>
-                </select>
-                
-                <select name="sector_comercializacion" required>
-                    <option value="" disabled selected>Comercialización</option>
-                    <option value="mercadeo_productos">Mercadeo de Productos y Subproductos</option>
-                    <option value="servicio_laboratorio">Servicio de Laboratorio y Certificaciones</option>
-                    <option value="minoristas">Minoristas</option>
-                    <option value="mayoristas">Mayoristas</option>
-                    <option value="exportadores">Exportadores</option>
-                    <option value="usos_finales">Usos Finales (Metalúrgica, Automotriz, etc.)</option>
-                </select>
-            </div>
+        <label class="group-label">Sector De Operación</label>
+        <div class="select-row">
+
+            <select name="sector_produccion" required>
+                <option value="" disabled selected>Exploración</option>
+                <option value="licencias_exploracion">Licencias de Exploración</option>
+                <option value="exploracion_terrenos">Exploración de Terrenos</option>
+                <option value="perforacion">Perforación</option>
+                <option value="voladura">Voladura</option>
+                <option value="descapote">Descapote</option>
+                <option value="remocion_materiales">Remoción de Materiales</option>
+                <option value="proveedores_insumos">Proveedores de Insumos Actividades Extractivas</option>
+                <option value="maquinaria_equipos">Maquinaria y Equipos de Operación</option>
+                <option value="servicios_ingenieria">Servicios Especializados de Ingeniería y Beneficio</option>
+                <option value="instrumentos_control">Instrumentos de Control y Automatización de Procesos</option>
+                <option value="servicios_seguridad">Prestación de Servicios de Seguridad</option>
+            </select>
+
+            <select name="sector_transformacion" required>
+                <option value="" disabled selected>Transformación</option>
+                <option value="extraccion">Extracción</option>
+                <option value="triturado">Triturado</option>
+                <option value="lavado">Lavado</option>
+                <option value="secado">Secado</option>
+                <option value="clasificacion">Clasificación</option>
+                <option value="centros_acopio">Centros de Acopio</option>
+                <option value="cargue_descargue">Cargue y Descargue</option>
+                <option value="puertos_vias">Puertos y Vías Férreas</option>
+                <option value="industrializacion">Industrialización</option>
+                <option value="recuperacion_valores">Recuperación de Valores y Coquizado</option>
+                <option value="manejo_desechos">Manejo de Desechos Sólidos y Líquidos</option>
+            </select>
+
+            <select name="sector_comercializacion" required>
+                <option value="" disabled selected>Comercialización</option>
+                <option value="mercadeo_productos">Mercadeo de Productos y Subproductos</option>
+                <option value="servicio_laboratorio">Servicio de Laboratorio y Certificaciones</option>
+                <option value="minoristas">Minoristas</option>
+                <option value="mayoristas">Mayoristas</option>
+                <option value="exportadores">Exportadores</option>
+                <option value="usos_finales">Usos Finales (Metalúrgica, Automotriz, etc.)</option>
+            </select>
         </div>
+    </div>
 
         <div class="agreement-group">
             <input type="checkbox" id="terminos" name="terminos" required>
