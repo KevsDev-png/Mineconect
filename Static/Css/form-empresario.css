@@ -187,6 +187,7 @@ body {
 .select-row {
     display: flex;
     gap: 15px;
+    margin-top: 10px;
 }
 
 .select-row select {

@@ -37,7 +37,7 @@
                 <i class="fas fa-envelope icon-inside"></i>
             </div>
             <div class="input-wrapper">
-                <input type="password" placeholder="Contraseña" name="contrasena" required id="contrasena" maxlength="8">
+                <input type="password" placeholder="Minimo 8 caracteres" name="contrasena" required id="contrasena" maxlength="8">
                 <i class="fas fa-lock icon-inside"></i>
             </div>
             <div class="input-wrapper">
@@ -50,11 +50,11 @@
                 <i class="fas fa-chevron-down icon-inside"></i>
             </div>
             <div class="input-wrapper">
-                <input type="text" placeholder="Número de documento" name="numero_documento_personal" required maxlength="11">
+                <input type="text" placeholder="Número de documento" name="numero_documento_personal" required maxlength="11" pattern="[0-9]*" inputmode="numeric">
                 <i class="fas fa-id-card icon-inside"></i>
             </div>
             <div class="input-wrapper">
-                <input type="tel" placeholder="Número de celular" name="numero_celular" required id="celular" maxlength="10" pattern="[0-9]*" inputmode="numeric">
+                <input type="tel" placeholder="Número de celular" name="celular" required id="celular" maxlength="10" pattern="[0-9]*" inputmode="numeric">
                 <i class="fas fa-phone icon-inside"></i>
             </div>
         </div>
@@ -74,8 +74,7 @@
                     Persona Natural
                 </label>
                 <div id="conditional-natural-wrapper" class="conditional-input input-wrapper hidden">
-                    <!-- El name="numero_documento" coincide con el 'play.py' -->
-                    <input type="text" id="numero-documento" name="numero_documento" placeholder="Número de documento" maxlength="11">
+                    <input type="text" id="numero-documento" name="numero_documento_contribuyente" placeholder="Número de documento" maxlength="11">
                     <i class="fas fa-id-card icon-inside"></i>
                 </div>
             </div>
@@ -87,7 +86,7 @@
                 </label>
                 <div id="conditional-juridica-wrapper" class="conditional-input input-wrapper hidden">
                     <!-- El name="nit" coincide con el 'play.py' -->
-                    <input type="text" id="nit" name="nit" placeholder="NIT (Número de Identificación Tributaria)">
+                    <input type="text" id="nit" name="nit" placeholder="NIT (sin dígito de verificación)" maxlength="10">
                     <i class="fas fa-id-card icon-inside"></i>
                 </div>
             </div>
@@ -115,6 +114,7 @@
 
         <div class="form-group">
         <label class="group-label">Sector De Operación</label>
+        <p class="info-text">Selecciona una opción de cada columna que represente el sector en el que opera tu empresa.</p>
         <div class="select-row">
 
             <select name="sector_produccion" required>
@@ -130,6 +130,7 @@
                 <option value="servicios_ingenieria">Servicios Especializados de Ingeniería y Beneficio</option>
                 <option value="instrumentos_control">Instrumentos de Control y Automatización de Procesos</option>
                 <option value="servicios_seguridad">Prestación de Servicios de Seguridad</option>
+                <option value="ninguna">Ninguna de las anteriores</option>
             </select>
 
             <select name="sector_transformacion" required>
@@ -145,6 +146,7 @@
                 <option value="industrializacion">Industrialización</option>
                 <option value="recuperacion_valores">Recuperación de Valores y Coquizado</option>
                 <option value="manejo_desechos">Manejo de Desechos Sólidos y Líquidos</option>
+                <option value="ninguna">Ninguna de las anteriores</option>
             </select>
 
             <select name="sector_comercializacion" required>
@@ -155,6 +157,7 @@
                 <option value="mayoristas">Mayoristas</option>
                 <option value="exportadores">Exportadores</option>
                 <option value="usos_finales">Usos Finales (Metalúrgica, Automotriz, etc.)</option>
+                <option value="ninguna">Ninguna de las anteriores</option>
             </select>
         </div>
     </div>
@@ -167,7 +170,6 @@
         <button type="submit" class="submit-button">FINALIZAR REGISTRO</button>
     </form>
 </div>
-
-    <script src="{{ url_for('static', filename='Js/form-empresario.js') }}"></script>
+<script src="{{ url_for('static', filename='Js/form-empresario.js') }}"></script>
 </body>
 </html>

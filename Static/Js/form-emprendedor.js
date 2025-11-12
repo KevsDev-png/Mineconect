@@ -1,85 +1,165 @@
 document.addEventListener('DOMContentLoaded', function() {
-    
-    const form = document.getElementById('registro-emprendedor-form');
-    const correoInput = document.getElementById('correo-emprendedor');
-    const celularInput = document.getElementById('celular-emprendedor'); 
+    let stylesInjected = false;
 
-    // --- FILTRADO EN TIEMPO REAL PARA CELULAR ---
-    if (celularInput) {
-        celularInput.addEventListener('input', function(event) {
-            this.value = this.value.replace(/[^0-9]/g, ''); // Solo permite números
-        });
+    /**
+     * Inyecta los estilos CSS para las notificaciones en el <head> del documento.
+     * Se ejecuta solo una vez para evitar duplicados.
+     */
+    function injectNotificationStyles() {
+        if (stylesInjected) return;
+
+        const style = document.createElement('style');
+        style.textContent = `
+            .custom-notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 8px;
+                color: white;
+                background-color: #333; /* Default/Info */
+                z-index: 20000;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                opacity: 0;
+                transform: translateX(100%);
+                transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+                font-family: Arial, sans-serif;
+                font-size: 15px;
+                max-width: 350px;
+            }
+            .custom-notification.error { background-color: #d9534f; }
+            .custom-notification.success { background-color: #5cb85c; }
+            .custom-notification.show {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            /* Estilos responsivos para pantallas pequeñas */
+            @media (max-width: 600px) {
+                .custom-notification {
+                    left: 10px;
+                    right: 10px;
+                    top: 10px;
+                    max-width: none;
+                    width: auto;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        stylesInjected = true;
     }
 
-    // --- VALIDACIÓN EN TIEMPO REAL PARA CORREO (.com) ---
+    /**
+     * Muestra una notificación no bloqueante en la pantalla.
+     * @param {string} message - El mensaje a mostrar.
+     * @param {string} type - El tipo de notificación ('error', 'success', 'info').
+     */
+    function showNotification(message, type = 'error') {
+        injectNotificationStyles(); // Asegura que los estilos estén presentes
+
+        const notification = document.createElement('div');
+        notification.textContent = message;
+        notification.className = `custom-notification ${type}`;
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            notification.addEventListener('transitionend', () => notification.remove(), { once: true });
+        }, 5000);
+    }
+
+    // --- VALIDACIONES DE CAMPOS ---
+
+    const form = document.getElementById('registro-emprendedor-form');
+    if (!form) return;
+
+    const correoInput = document.getElementById('correo-emprendedor');
+    const contrasenaInput = document.getElementById('contrasena-emprendedor');
+    const celularInput = document.getElementById('celular-emprendedor');
+    const docInput = document.querySelector('input[name="numero_documento"]');
+
+    // Permitir solo números en campos numéricos
+    [celularInput, docInput].forEach(input => {
+        if (input) {
+            input.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        }
+    });
+
+    // Validación de correo al salir del campo
     if (correoInput) {
-        correoInput.addEventListener('blur', function() { 
-            const correo = this.value.trim();
-            if (correo.includes('@') && correo.split('@')[1].length > 0 && !correo.endsWith('.com')) {
-                alert("Recuerda que el correo debe terminar en '.com'.");
+        correoInput.addEventListener('blur', () => {
+            const emailRegex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+            if (correoInput.value && !emailRegex.test(correoInput.value)) {
+                showNotification('El correo no es válido o ya esta registrado. Por favor, ingrese un correo válido.', 'error');
             }
         });
     }
-    
+
+    // Validación de contraseña al salir del campo
+    if (contrasenaInput) {
+        contrasenaInput.addEventListener('blur', () => {
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*._-]).{8,}$/;
+            if (contrasenaInput.value && !passwordRegex.test(contrasenaInput.value)) {
+                showNotification('La contraseña debe tener 8+ caracteres, mayúscula, minúscula, número y un símbolo (!@#$%^&*._-).', 'error');
+            }
+        });
+    }
+
     // --- VALIDACIÓN FINAL AL ENVIAR EL FORMULARIO ---
-    if (form) {
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevenir el envío
+    form.addEventListener('submit', function(event) {
+        const requiredFields = [
+            'nombre_completo', 'correo', 'contrasena', 'numero_documento', 
+            'numero_celular', 'programa_formacion', 'titulo_proyecto', 
+            'descripcion_proyecto', 'relacion_sector'
+        ];
 
-            // --- 1. CAPTURAR VALORES ---
-            const nombreCompleto = document.querySelector('input[name="nombre_completo"]').value.trim();
-            const correo = document.getElementById('correo-emprendedor').value.trim();
-            const contrasena = document.getElementById('contrasena-emprendedor').value;
-            const tipoDocumento = document.querySelector('select[name="tipo_documento"]').value;
-            const celular = celularInput.value; // Ya filtrado a solo números
-            const programaFormacion = document.querySelector('input[name="programa_formacion"]').value.trim();
-            const tituloProyecto = document.querySelector('input[name="titulo_proyecto"]').value.trim();
-            const descripcionProyecto = document.querySelector('textarea[name="descripcion_proyecto"]').value.trim();
-            const relacionSector = document.querySelector('input[name="relacion_sector"]').value.trim();
-            const tipoApoyo = document.querySelector('input[name="tipo_apoyo"]:checked');
-            const terminos = document.getElementById('terminos-emprendedor').checked;
-
-            // --- 2. EXPRESIONES REGULARES ---
-            const emailRegex = /^[^@ ]+@[^@ ]+\.[^@ ]+$/;
-            // Quitamos la restricción de 8 caracteres y añadimos la complejidad
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*._-]).{8,}$/; 
-            const numericRegex = /^[0-9]+$/; // Solo números
-
-            // --- 3. EJECUTAR VALIDACIONES ---
-
-            if (nombreCompleto === '') { alert("El Nombre Completo es obligatorio."); return; }
-            
-            // Correo
-            if (!emailRegex.test(correo) || !correo.endsWith('.com')) {
-                alert("El correo no es válido. Debe tener un formato correcto y terminar en '.com'.");
+        // Validar campos de texto y textarea requeridos
+        for (const name of requiredFields) {
+            const field = form.querySelector(`[name="${name}"]`);
+            if (field && field.value.trim() === '') {
+                event.preventDefault();
+                showNotification(`El campo "${field.placeholder || name.replace(/_/g, ' ')}" no puede estar vacío.`, 'error');
+                field.focus();
                 return;
             }
-            
-            // Contraseña (Complejidad + Mínimo 8 caracteres)
-            if (!passwordRegex.test(contrasena)) {
-                 alert("La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial: !@#$%^&*._-");
-                 return;
-             }
+        }
 
-            if (tipoDocumento === null || tipoDocumento === '') { alert("Debe seleccionar un Tipo de Documento."); return; }
-            
-            // Celular (Ya filtrado, solo validamos longitud)
-            if (celular.length !== 10) {
-                 alert("El Número de celular debe contener exactamente 10 dígitos numéricos.");
-                 return;
-             }
+        // Validar select de tipo de documento
+        const tipoDocField = form.querySelector('[name="tipo_documento"]');
+        if (tipoDocField && tipoDocField.value === '') {
+            event.preventDefault();
+            showNotification('Debes seleccionar un tipo de documento.', 'error');
+            tipoDocField.focus();
+            return;
+        }
 
-            if (programaFormacion === '') { alert("El Programa de Formación es obligatorio."); return; }
-            if (tituloProyecto === '') { alert("El Título del Proyecto es obligatorio."); return; }
-            if (descripcionProyecto === '') { alert("La Descripción del Proyecto es obligatoria."); return; }
-            if (relacionSector === '') { alert("El campo 'Relación Con El Sector Minero' es obligatorio."); return; }
-            if (!tipoApoyo) { alert("Debe seleccionar un Tipo de Apoyo."); return; }
-            if (!terminos) { alert("Debe aceptar los Términos y Condiciones."); return; }
+        // Validar celular
+        if (celularInput.value.length !== 10) {
+            event.preventDefault();
+            showNotification('El número de celular debe tener exactamente 10 dígitos.', 'error');
+            celularInput.focus();
+            return;
+        }
 
-            // --- 4. SI TODO ESTÁ BIEN, ENVIAR EL FORMULARIO ---
-            // Si todas las validaciones pasan, se elimina el preventDefault y se envía el formulario.
-            // Ya no es necesario el alert ni llamar a form.submit() manualmente.
-            event.target.submit();
-        });
-    }
+        // Validar tipo de apoyo
+        const tipoApoyo = form.querySelector('input[name="tipo_apoyo"]:checked');
+        if (!tipoApoyo) {
+            event.preventDefault();
+            showNotification('Debes seleccionar un tipo de apoyo que buscas.', 'error');
+            return;
+        }
+
+        // Validar términos y condiciones
+        if (!document.getElementById('terminos-emprendedor').checked) {
+            event.preventDefault();
+            showNotification('Debes aceptar los Términos y Condiciones para continuar.', 'error');
+            return;
+        }
+    });
 });
