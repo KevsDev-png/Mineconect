@@ -95,8 +95,22 @@ class Empresario(db.Model):
     __tablename__ = 'empresarios'
     id = db.Column(db.Integer, primary_key=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id', ondelete='CASCADE'), unique=True, nullable=False)
-    # Aquí irán los campos específicos del empresario
+    
+    # Campos del formulario de registro
+    nombre_completo = db.Column(db.String(150), nullable=False)
+    tipo_documento_personal = db.Column(db.String(10), nullable=False)
+    numero_documento_personal = db.Column(db.String(30), unique=True, nullable=False)
+    numero_celular = db.Column(db.String(15), nullable=False)
     nombre_empresa = db.Column(db.String(150), nullable=False)
+    tipo_contribuyente = db.Column(db.String(20), nullable=False)
+    numero_documento_contribuyente = db.Column(db.String(30), unique=True, nullable=True) # Para Persona Natural
+    nit = db.Column(db.String(30), unique=True, nullable=True) # Para Persona Jurídica
+    tamano = db.Column(db.String(20), nullable=False)
+    etapa = db.Column(db.String(30), nullable=False)
+    sector_produccion = db.Column(db.String(100), nullable=False)
+    sector_transformacion = db.Column(db.String(100), nullable=False)
+    sector_comercializacion = db.Column(db.String(100), nullable=False)
+
 
     def __repr__(self):
         return f'<Empresario {self.nombre_empresa}>'
@@ -106,7 +120,16 @@ class Inversionista(db.Model):
     __tablename__ = 'inversionistas'
     id = db.Column(db.Integer, primary_key=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id', ondelete='CASCADE'), unique=True, nullable=False)
-    # Aquí irán los campos específicos del inversionista
+    # Campos del formulario de registro
+    nombre_completo = db.Column(db.String(150), nullable=False)
+    tipo_documento = db.Column(db.String(10), nullable=False)
+    numero_documento = db.Column(db.String(30), unique=True, nullable=False)
+    numero_celular = db.Column(db.String(15), nullable=False)
+    nombre_fondo = db.Column(db.String(150)) # Puede ser opcional
+    tipo_inversion = db.Column(db.String(50), nullable=False)
+    # Para los checkboxes, guardaremos una lista de strings separada por comas.
+    etapas_interes = db.Column(db.String(255))
+    areas_interes = db.Column(db.String(255))
 
 class Institucion(db.Model):
     """Modelo que representa a una institución."""

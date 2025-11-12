@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const esValido = expReg.test(email);
        
         if (email && !esValido) { // Solo muestra la notificación si hay texto y no es válido.
-            showNotification("El correo no es válido, por favor ingrese un correo válido.", 'error');
+            showNotification("El correo no es válido o ya esta registrado. Por favor, ingrese un correo válido.", 'error');
             // Opcional: enfocar el campo de nuevo
             if (emailInput) {
                 emailInput.focus();

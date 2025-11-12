@@ -16,9 +16,12 @@
             </svg>
         </div>
         <h1>¡Registro Exitoso!</h1>
-        
-        <p>Tu cuenta de <strong>{{ tipo_cuenta }}</strong> ha sido creada correctamente.</p>
-        
+        <!-- Usamos la variable 'nombre_perfil' para un saludo más personal -->
+        {% if nombre_perfil %}
+            <p>¡Bienvenido, <strong>{{ nombre_perfil }}</strong>!</p>
+        {% endif %}
+        <!-- Usamos la variable 'tipo_cuenta' para confirmar el tipo de perfil -->
+        <p>Tu cuenta de <strong>{{ tipo_cuenta | capitalize }}</strong> ha sido creada correctamente.</p>
         <p>Serás redirigido a la página principal en <span id="countdown">5</span> segundos.</p>
         
         <a href="{{ url_for('Principal') }}" class="btn-home">Volver a Inicio</a>
