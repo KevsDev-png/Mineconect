@@ -1,15 +1,59 @@
 /**
- * auth.js
- * 
- * Este archivo maneja la lógica de autenticación para el modal de inicio de sesión,
- * incluyendo el cambio entre la vista de login y la de verificación de código,
- * así como la funcionalidad de los campos de entrada del código.
- * También se incluye la lógica para el menú de navegación móvil.
+ * auth.js con AJAX
  */
 
-// Se asegura de que todo el código dentro de este bloque se ejecute solo después de que
-// toda la página HTML se haya cargado por completo. Es una buena práctica para evitar
-// errores al intentar manipular elementos que aún no existen.
+let stylesInjected = false;
+
+
+function injectNotificationStyles() {
+    if (stylesInjected) return;
+    const style = document.createElement('style');
+    style.textContent = `
+        .auth-notification {
+            position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+            padding: 12px 25px; border-radius: 8px; color: white;
+            background-color: #d9534f; /* Error por defecto */
+            z-index: 10001; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            opacity: 0; transform: translate(-50%, -20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            font-family: Arial, sans-serif; font-size: 15px;
+            max-width: 90%; text-align: center;
+        }
+        .auth-notification.success { background-color: #5cb85c; }
+        .auth-notification.show { opacity: 1; transform: translate(-50%, 0); }
+    `;
+    document.head.appendChild(style);
+    stylesInjected = true;
+}
+
+/**
+ * Muestra una notificación no bloqueante en la pantalla.
+ * @param {string} message - El mensaje a mostrar.
+ * @param {string} type - El tipo de notificación ('error', 'success').
+ */
+function showAuthNotification(message, type = 'error') {
+    injectNotificationStyles();
+
+    // Remover notificaciones existentes para evitar apilamiento
+    document.querySelectorAll('.auth-notification').forEach(n => n.remove());
+
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.className = `auth-notification ${type}`;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+
+    setTimeout(() => {
+        notification.classList.remove('show');
+        notification.addEventListener('transitionend', () => notification.remove(), { once: true });
+    }, 4000);
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
 
     /**
@@ -47,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const backToLoginBtn = document.getElementById('back-to-login-btn'); // El botón para volver al login.
         const emailInput = document.getElementById('login-email'); // El campo para escribir el email.
         const emailDisplay = document.getElementById('verification-email-display'); // Donde se muestra el email ofuscado.
+        const verificationForm = document.getElementById('verificationForm');
         
         // Elementos para el flujo de recuperación de contraseña parte del modal de login
         const recoveryView = document.getElementById('recovery-view');
@@ -54,54 +99,50 @@ document.addEventListener('DOMContentLoaded', () => {
         const backToLoginFromRecoveryBtn = document.getElementById('back-to-login-from-recovery-btn');
 
         // Comprueba si todos los elementos fueron encontrados. Si falta alguno, detiene la función.
-        if (!loginForm || !loginView || !verificationView || !backToLoginBtn || !emailInput || !emailDisplay || !recoveryView || !forgotPasswordLink || !backToLoginFromRecoveryBtn) {
-            console.warn('No se encontraron todos los elementos para el flujo de autenticación y recuperación.');
-            return; // Termina la ejecución de esta función.
+        if (!loginForm || !loginView || !verificationView || !backToLoginBtn || !emailInput || !emailDisplay || !recoveryView || !forgotPasswordLink || !backToLoginFromRecoveryBtn || !verificationForm) {
         }
 
+//verificacion de codigo
+
         // Añade un "escuchador" al formulario para el evento 'submit' (cuando se intenta enviar).
-        loginForm.addEventListener('submit', (event) => {
+        loginForm.addEventListener('submit', async (event) => {
             // Previene el comportamiento por defecto del formulario, que es recargar la página.
             event.preventDefault(); 
+            const submitButton = loginForm.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Verificando...';
 
-            // Este bloque 'try...catch' intenta ofuscar el correo y maneja posibles errores.
+            const formData = new FormData(loginForm);
+            const data = Object.fromEntries(formData.entries());
+
             try {
-                // Obtiene el valor (el texto) escrito en el campo del email.
-                const email = emailInput.value;
-                // Divide el email en dos partes usando el '@' como separador. Ej: 'usuario' y 'dominio.com'.
-                const [user, domain] = email.split('@');
-                // Si el correo no tiene '@', una de las partes será indefinida. Esto lanza un error.
-                if (!user || !domain) {
-                    throw new Error('Formato de correo inválido.');
+                const response = await fetch(loginForm.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // Éxito: el backend envió el código
+                    emailDisplay.textContent = result.email;
+                    loginView.style.display = 'none';
+                    verificationView.style.display = 'block';
+                    const firstInput = document.querySelector('.code-input');
+                    if (firstInput) firstInput.focus();
+                } else {
+                    // Error manejado por el backend
+                    showAuthNotification(result.message || 'Ocurrió un error.', 'error');
                 }
-                // Crea una versión "ofuscada" del usuario: toma los primeros 4 caracteres y añade '*****'.
-                const maskedUser = user.substring(0, 4) + '*****';
-                // Muestra el correo ofuscado en el elemento HTML correspondiente.
-                emailDisplay.textContent = `${maskedUser}@${domain}`;
             } catch (error) {
-                // Si ocurre un error en el bloque 'try', se ejecuta esto.
-                console.error('Error al ofuscar el correo:', error);
-                // Muestra un mensaje genérico en caso de que el formato del correo sea incorrecto.
-                emailDisplay.textContent = 'un correo electrónico.';
-            }
-
-            // ---
-            // NOTA DE SEGURIDAD: Aquí es donde se debería llamar al (backend) para
-            // verificar que el email y la contraseña son correctos y para que el servidor
-            // envíe el código de verificación real.
-            // ---
-
-            // Simulación: se asume que el login fue exitoso y se cambia de vista.
-            // Oculta la vista de inicio de sesión.
-            loginView.style.display = 'none';
-            // Muestra la vista de verificación de código.
-            verificationView.style.display = 'block';
-            
-            // Busca el primer campo de entrada para el código de verificación.
-            const firstInput = document.querySelector('.code-input');
-            // Si lo encuentra, pone el cursor (foco) en él para que el usuario pueda empezar a escribir.
-            if (firstInput) {
-                firstInput.focus();
+                console.error('Error en la solicitud de login:', error);
+                showAuthNotification('Error de conexión con el servidor.', 'error');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Iniciar sesión';
             }
         });
 
@@ -126,6 +167,41 @@ document.addEventListener('DOMContentLoaded', () => {
         backToLoginFromRecoveryBtn.addEventListener('click', () => {
             recoveryView.style.display = 'none'; // Oculta la vista de recuperación.
             loginView.style.display = 'block'; // Muestra la vista de inicio de sesión.
+        });
+
+        // Añade un "escuchador" al formulario de verificación
+        verificationForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const submitButton = verificationForm.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Verificando...';
+
+            const inputs = verificationForm.querySelectorAll('.code-input');
+            const code = Array.from(inputs).map(input => input.value).join('');
+
+            try {
+                const response = await fetch('/verify_code', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: code }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showAuthNotification(result.message, 'success');
+                    // Redirigir a la página principal (o a un dashboard) después de un breve retraso
+                    setTimeout(() => {
+                        window.location.href = '/'; // Cambia esto a la ruta del dashboard si tienes una
+                    }, 1500);
+                } else {
+                    showAuthNotification(result.message || 'Error al verificar el código.', 'error');
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Verificar e Iniciar Sesión';
+                }
+            } catch (error) {
+                showAuthNotification('Error de conexión al verificar el código.', 'error');
+            }
         });
     }
 

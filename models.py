@@ -88,7 +88,7 @@ class Emprendedor (db.Model):
     def __repr__(self):
         return f'<Emprendedor {self.nombre_completo}>'
 
-# --- Modelos para los otros perfiles (necesarios para resolver las relaciones) ---
+
 
 class Empresario(db.Model):
     """Modelo que representa a un empresario."""

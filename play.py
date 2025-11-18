@@ -1,10 +1,13 @@
 # app.py
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from sqlalchemy import text
 from dotenv import load_dotenv
 import os
 import click # Importar click para los comandos CLI
 import logging
+from flask_mail import Mail, Message # Importar Flask-Mail
+import random # Para generar el código
+from datetime import datetime, timedelta, timezone
 from flask_migrate import Migrate # Importar Migrate
 from extensions import db # Importar 'db' desde extensions.py
 from models import Usuario, Emprendedor, TipoPerfil, Empresario, Inversionista, Institucion # Importar todos los modelos
@@ -23,11 +26,21 @@ app = Flask(__name__)
 # Configuración de la base de datos y secret key
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")  # Ej: postgresql://postgres:tu_contraseña@localhost:5432/mineconect
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = os.getenv("SECRET_KEY", "clave_por_defecto")
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "clave_por_defecto_muy_segura")
+
+# --- Configuración de Flask-Mail ---
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 587))
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'true').lower() in ['true', '1', 't']
+app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL', 'false').lower() in ['true', '1', 't']
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = ('Mineconect', os.getenv('MAIL_USERNAME'))
 
 # Inicializar la base de datos con la app
 db.init_app(app)
-
+# Inicializar Flask-Mail
+mail = Mail(app)
 # Configurar Flask-Migrate
 migrate = Migrate(app, db)
 
@@ -274,40 +287,95 @@ def registro_inversionista():
 
     return render_template('Registro_inversionista.html')
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-        profile_type_str = request.form.get('profile')
-
-        if not email or not password or not profile_type_str:
-            flash('Por favor, completa todos los campos.', 'warning')
-            return redirect(url_for('Principal'))
-
         try:
+            data = request.get_json()
+            email = data.get('email')
+            password = data.get('password')
+            profile_type_str = data.get('profile')
+
+            if not email or not password or not profile_type_str:
+                return jsonify({'success': False, 'message': 'Por favor, completa todos los campos.'}), 400
+
             # Convertir el string del formulario al tipo Enum
             profile_type = TipoPerfil(profile_type_str)
         except ValueError:
-            flash('El perfil seleccionado no es válido.', 'danger')
-            return redirect(url_for('Principal'))
+            return jsonify({'success': False, 'message': 'El perfil seleccionado no es válido.'}), 400
+        except Exception:
+            return jsonify({'success': False, 'message': 'Formato de solicitud incorrecto.'}), 400
 
-        # Buscar al usuario por su email
-        usuario = Usuario.query.filter_by(email=email).first()
+        usuario = Usuario.query.filter_by(email=email, tipo_perfil=profile_type).first()
 
-        # Verificar si el usuario existe, si la contraseña es correcta Y si el perfil coincide
-        if usuario and usuario.check_password(password) and usuario.tipo_perfil == profile_type:
-            # Guardar información del usuario en la sesión
-            session['user_id'] = usuario.id
-            session['user_email'] = usuario.email
-            session['user_profile'] = usuario.tipo_perfil.value
-            
-            flash(f'¡Bienvenido de nuevo, {usuario.get_perfil().nombre_completo}!', 'success')
-            # Redirigir a un dashboard o página principal del usuario
-            return redirect(url_for('Principal')) # Cambia 'Principal' por tu ruta de dashboard cuando la tengas
+        if usuario and usuario.check_password(password):
+            # --- Lógica de envío de código ---
+            verification_code = f"{random.randint(100000, 999999)}"
+            expiration_time = datetime.now(timezone.utc) + timedelta(minutes=10) # Código válido por 10 minutos
+
+            # Guardar en la sesión
+            session['verification_code'] = verification_code
+            session['code_expiration'] = expiration_time.isoformat()
+            session['user_to_verify'] = usuario.id
+
+            try:
+                # Enviar correo
+                msg = Message(
+                    subject="Tu código de verificación de Mineconect",
+                    recipients=[usuario.email]
+                )
+                msg.html = render_template('Email/verificacion-codigo.html', code=verification_code)
+                mail.send(msg)
+                app.logger.info(f"✅ Código de verificación enviado a {usuario.email}")
+
+                # Ofuscar correo para mostrar en el frontend
+                user_part, domain_part = usuario.email.split('@')
+                masked_user = user_part[:2] + '****' + user_part[-2:]
+                masked_email = f"{masked_user}@{domain_part}"
+
+                return jsonify({'success': True, 'message': 'Código enviado.', 'email': masked_email})
+
+            except Exception as e:
+                app.logger.error(f"❌ Error al enviar correo de verificación: {e}")
+                return jsonify({'success': False, 'message': 'No se pudo enviar el código. Intenta más tarde.'}), 500
         else:
-            flash('Correo, contraseña o perfil incorrectos. Por favor, inténtalo de nuevo.', 'danger')
-            return redirect(url_for('Principal'))
+            return jsonify({'success': False, 'message': 'Correo, contraseña o perfil incorrectos.'}), 401
+
+    # Si es una petición GET, simplemente redirige a la principal
+    return redirect(url_for('Principal'))
+
+@app.route('/verify_code', methods=['POST'])
+def verify_code():
+    data = request.get_json()
+    user_code = data.get('code')
+
+    stored_code = session.get('verification_code')
+    expiration_str = session.get('code_expiration')
+    user_id = session.get('user_to_verify')
+
+    if not all([user_code, stored_code, expiration_str, user_id]):
+        return jsonify({'success': False, 'message': 'Sesión inválida o expirada. Por favor, inicia sesión de nuevo.'}), 400
+
+    expiration_time = datetime.fromisoformat(expiration_str)
+
+    if datetime.now(timezone.utc) > expiration_time:
+        return jsonify({'success': False, 'message': 'El código ha expirado. Por favor, solicita uno nuevo.'}), 400
+
+    if user_code == stored_code:
+        usuario = Usuario.query.get(user_id)
+        # Limpiar sesión de verificación
+        session.pop('verification_code', None)
+        session.pop('code_expiration', None)
+        session.pop('user_to_verify', None)
+
+        # Iniciar sesión de verdad
+        session['user_id'] = usuario.id
+        session['user_email'] = usuario.email
+        session['user_profile'] = usuario.tipo_perfil.value
+        
+        return jsonify({'success': True, 'message': f'¡Bienvenido de nuevo, {usuario.get_perfil().nombre_completo}!'})
+    else:
+        return jsonify({'success': False, 'message': 'El código de verificación es incorrecto.'}), 400
 
 # --- Comandos CLI para administración ---
 
