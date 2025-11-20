@@ -173,10 +173,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (tipoDocumentoSelect && numeroDocumentoInput) {
         // Evento para permitir solo la entrada de números en tiempo real
-        numeroDocumentoInput.addEventListener('input', function() {
-            // Elimina cualquier caracter que no sea un dígito
-            this.value = this.value.replace(/\D/g, '');
-        });
+         numeroDocumentoInput.addEventListener('input', function() {
+            const tipo = tipoDocumentoSelect.value;
+            // Si no es Pasaporte, solo permite números.
+            if (tipo !== 'PAS') {
+                // Elimina cualquier caracter que no sea un dígito
+                this.value = this.value.replace(/\D/g, '');
+            }
+         });
 
         // 1. Cambiar el placeholder y maxlength al seleccionar un tipo de documento
         tipoDocumentoSelect.addEventListener('change', function() {
@@ -189,6 +193,9 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (tipo === 'CC' || tipo === 'CE') {
                 numeroDocumentoInput.placeholder = 'Ej: 1023456789';
                 numeroDocumentoInput.maxLength = 10;
+            } else if (tipo === 'PAS') {
+                numeroDocumentoInput.placeholder = 'Número de Pasaporte';
+                numeroDocumentoInput.maxLength = 20;
             } else {
                 numeroDocumentoInput.placeholder = 'Número de Documento';
                 numeroDocumentoInput.maxLength = 20; // Un valor por defecto
@@ -214,6 +221,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Cédulas suelen tener entre 7 y 10 dígitos numéricos.
                 esValido = /^\d{7,10}$/.test(numero);
                 mensajeError = 'El número de documento no es válido. Debe contener entre 7 y 10 dígitos.';
+            } else if (tipo === 'PAS') {
+                // Pasaportes pueden ser alfanuméricos, validamos que tenga entre 6 y 20 caracteres.
+                esValido = /^[A-Za-z0-9]{6,20}$/.test(numero);
+                mensajeError = 'El número de pasaporte no es válido. Debe tener entre 6 y 20 caracteres alfanuméricos.';
             }
 
             if (tipo && !esValido) { // Solo validar si se ha seleccionado un tipo
