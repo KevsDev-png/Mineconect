@@ -111,7 +111,7 @@ def registro_empresario():
         try:
             correo = request.form['correo']
             # Verificar si el correo ya existe
-            if Usuario.query.filter_by(email=correo).first():
+            if db.session.execute(db.select(Usuario).filter_by(email=correo)).first():
                 flash('El correo electrónico ya está registrado. Por favor, usa otro.', 'error')
                 return redirect(url_for('registro_empresario'))
 
@@ -175,11 +175,11 @@ def registro_institucion():
             errors = {} # Creamos un diccionario para guardar los errores
 
             # Verificar si el correo ya está registrado en la tabla de usuarios
-            if Usuario.query.filter_by(email=correo).first():
+            if db.session.execute(db.select(Usuario).filter_by(email=correo)).first():
                 errors['correo'] = 'El correo electrónico ya está registrado. Por favor, utiliza otro.'
 
             # Verificar si el NIT ya está registrado en la tabla de instituciones
-            if Institucion.query.filter_by(nit=nit).first():
+            if db.session.execute(db.select(Institucion).filter_by(nit=nit)).first():
                 errors['nit'] = 'El NIT ya está registrado. Por favor, verifica la información.'
 
             if errors:
@@ -239,7 +239,7 @@ def registro_inversionista():
         try:
             correo = request.form['correo']
             # Verificar si el correo ya existe
-            if Usuario.query.filter_by(email=correo).first():
+            if db.session.execute(db.select(Usuario).filter_by(email=correo)).first():
                 flash('El correo electrónico ya está registrado. Por favor, usa otro.', 'error')
                 return redirect(url_for('registro_inversionista'))
             
@@ -306,7 +306,7 @@ def login():
         except Exception:
             return jsonify({'success': False, 'message': 'Formato de solicitud incorrecto.'}), 400
 
-        usuario = Usuario.query.filter_by(email=email, tipo_perfil=profile_type).first()
+        usuario = db.session.execute(db.select(Usuario).filter_by(email=email, tipo_perfil=profile_type)).scalar_one_or_none()
 
         if usuario and usuario.check_password(password):
             # --- Lógica de envío de código ---
@@ -362,7 +362,7 @@ def verify_code():
         return jsonify({'success': False, 'message': 'El código ha expirado. Por favor, solicita uno nuevo.'}), 400
 
     if user_code == stored_code:
-        usuario = Usuario.query.get(user_id)
+        usuario = db.session.get(Usuario, user_id)
         # Limpiar sesión de verificación
         session.pop('verification_code', None)
         session.pop('code_expiration', None)
@@ -384,7 +384,7 @@ def verify_code():
 @click.argument("password")
 def create_superuser(email, password):
     """Crea un usuario administrador."""
-    if Usuario.query.filter_by(email=email).first():
+    if db.session.execute(db.select(Usuario).filter_by(email=email)).first():
         print(f"El usuario con el correo '{email}' ya existe.")
         return
 
@@ -414,7 +414,7 @@ def create_superuser(email, password):
 def delete_user(email):
     """Elimina un usuario de la base de datos por su email."""
     # Buscar al usuario por su email
-    usuario = Usuario.query.filter_by(email=email).first()
+    usuario = db.session.execute(db.select(Usuario).filter_by(email=email)).scalar_one_or_none()
 
     if not usuario:
         print(f"No se encontró ningún usuario con el correo '{email}'.")
