@@ -137,7 +137,7 @@ class Institucion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id', ondelete='CASCADE'), unique=True, nullable=False)
     # Campos del formulario de registro
-    nombre_institucion = db.Column(db.String(150), nullable=False)
+    nombre_completo = db.Column(db.String(150), nullable=False)
     nit = db.Column(db.String(30), unique=True, nullable=False)
     tipo_institucion = db.Column(db.String(50), nullable=False)
     municipio = db.Column(db.String(100), nullable=False)

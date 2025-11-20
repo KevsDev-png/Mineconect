@@ -124,7 +124,7 @@ def registro_empresario():
             
             # Determinar el tipo de contribuyente para guardar el documento correcto
             tipo_contribuyente = request.form.get('tipo_contribuyente')
-            num_doc_contribuyente = request.form.get('numero_documento') if tipo_contribuyente == 'natural' else None
+            num_doc_contribuyente = request.form.get('numero_documento_contribuyente') if tipo_contribuyente == 'natural' else None
             nit_contribuyente = request.form.get('nit') if tipo_contribuyente == 'juridica' else None
 
             # 2. Crear el perfil específico del empresario
@@ -201,7 +201,7 @@ def registro_institucion():
 
             # 3. Crear el perfil específico de la institución
             nueva_institucion = Institucion(
-                nombre_institucion=request.form['nombre_institucion'],
+                nombre_completo=request.form['nombre_institucion'],
                 nit=request.form['nit'],
                 tipo_institucion=request.form['tipo_institucion'],
                 municipio=request.form['municipio'],
@@ -220,7 +220,7 @@ def registro_institucion():
             return render_template(
                 'registro_exitoso.html',
                 tipo_cuenta='Institución',
-                nombre_perfil=nueva_institucion.nombre_institucion
+                nombre_perfil=nueva_institucion.nombre_completo
             )
 
         except Exception as e:
