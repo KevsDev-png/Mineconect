@@ -75,19 +75,50 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- LÓGICA PARA CAMPOS CONDICIONALES DE TIPO DE CONTRIBUYENTE ---
     const radiosContribuyente = document.querySelectorAll('input[name="tipo_contribuyente"]');
     const naturalWrapper = document.getElementById('conditional-natural-wrapper');
+    const inputDocumentoNatural = document.getElementById('numero-documento');
     const juridicaWrapper = document.getElementById('conditional-juridica-wrapper');
+    const inputNitJuridica = document.getElementById('nit');
 
     radiosContribuyente.forEach(radio => {
         radio.addEventListener('change', function() {
             if (this.value === 'natural') {
+                // Muestra campo Natural, lo hace requerido
                 naturalWrapper.classList.remove('hidden');
+                inputDocumentoNatural.required = true;
+
+                // Oculta campo Jurídica, quita el required y limpia el valor
                 juridicaWrapper.classList.add('hidden');
+                inputNitJuridica.required = false;
+                inputNitJuridica.value = '';
             } else if (this.value === 'juridica') {
-                naturalWrapper.classList.add('hidden');
+                // Muestra campo Jurídica, lo hace requerido
                 juridicaWrapper.classList.remove('hidden');
+                inputNitJuridica.required = true;
+
+                // Oculta campo Natural, quita el required y limpia el valor
+                naturalWrapper.classList.add('hidden');
+                inputDocumentoNatural.required = false;
+                inputDocumentoNatural.value = '';
             }
         });
     });
+
+    // --- Funcionalidad para mostrar/ocultar contraseña ---
+    // Hacemos la función global para que el `onclick` del HTML la encuentre.
+    window.togglePassword = function() {
+        const passwordInput = document.getElementById('contrasena');
+        const eyeIcon = document.getElementById('eye-icon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+        }
+    }
 
     // --- VALIDACIONES DE CAMPOS ---
 
@@ -96,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const correoInput = document.getElementById('correo');
     const contrasenaInput = document.getElementById('contrasena');
-    const celularInput = document.getElementById('celular');
+    const celularInput = document.querySelector('input[name="numero_celular"]'); // Ajustado para usar name
     const nitInput = document.getElementById('nit');
     const docPersonalInput = document.querySelector('input[name="numero_documento_personal"]');
     const docContribuyenteInput = document.getElementById('numero-documento');
@@ -144,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(event) {
         const requiredTextFields = [
             'nombre_completo', 'correo', 'contrasena', 'numero_documento_personal', 
-            'celular', 'nombre_empresa'
+            'numero_celular', 'nombre_empresa'
         ];
         const requiredSelects = [
             'tipo_documento_personal', 'sector_produccion', 
@@ -156,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const field = form.querySelector(`[name="${name}"]`);
             if (field && field.value.trim() === '') {
                 event.preventDefault();
-                showNotification(`El campo "${field.placeholder || 'requerido'}" no puede estar vacío.`, 'error');
+                showNotification(`El campo "${field.placeholder || name.replace(/_/g, ' ')}" no puede estar vacío.`, 'error');
                 field.focus();
                 return;
             }
@@ -187,15 +218,17 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             showNotification('Debes seleccionar un tipo de contribuyente.', 'error');
             return;
-        } else if (tipoContribuyente.value === 'natural' && docContribuyenteInput.value.trim() === '') {
-            event.preventDefault();
-            showNotification('Debes ingresar el número de documento para Persona Natural.', 'error');
-            docContribuyenteInput.focus();
-            return;
-        } else if (tipoContribuyente.value === 'juridica' && !/^\d{10}$/.test(nitInput.value)) {
+        } else if (tipoContribuyente.value === 'juridica' && nitInput.required && !/^\d{10}$/.test(nitInput.value)) {
             event.preventDefault();
             showNotification('El NIT para Persona Jurídica debe tener 10 dígitos.', 'error');
             nitInput.focus();
+            return;
+        }
+
+        // Validar tamaño de la empresa
+        if (!form.querySelector('input[name="tamano"]:checked')) {
+            event.preventDefault();
+            showNotification('Debes seleccionar el tamaño de la empresa.', 'error');
             return;
         }
 

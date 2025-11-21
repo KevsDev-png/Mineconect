@@ -72,6 +72,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     }
 
+    // --- Funcionalidad para mostrar/ocultar contraseña ---
+    // Hacemos la función global para que el `onclick` del HTML la encuentre.
+    window.togglePassword = function() {
+        const passwordInput = document.getElementById('contrasena-emprendedor');
+        const eyeIcon = document.getElementById('eye-icon-emprendedor');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+        }
+    }
+
     // --- VALIDACIONES DE CAMPOS ---
 
     const form = document.getElementById('registro-emprendedor-form');

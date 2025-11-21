@@ -19,11 +19,6 @@
         </div>
     </div>
 
-    <!-- 
-      ¡CAMBIO IMPORTANTE AQUÍ! 
-      Cambiamos action="/ruta-del-backend" por action="{{ url_for('registro_empresario') }}"
-      Esto le dice al formulario que envíe los datos a tu función de Python.
-    -->
     <form action="{{ url_for('registro_empresario') }}" method="POST" id="registro-form">
 
         <h2 class="form-section-title">Información Personal <i class="fas fa-user"></i></h2>
@@ -37,8 +32,10 @@
                 <i class="fas fa-envelope icon-inside"></i>
             </div>
             <div class="input-wrapper">
-                <input type="password" placeholder="Minimo 8 caracteres" name="contrasena" required id="contrasena" maxlength="8">
-                <i class="fas fa-lock icon-inside"></i>
+                <input type="password" placeholder="Mínimo 8 caracteres" name="contrasena" required id="contrasena" maxlength="8">
+                <button type="button" class="password-toggle-btn" onclick="togglePassword()" aria-label="Mostrar u ocultar contraseña">
+                    <i id="eye-icon" class="fas fa-eye-slash"></i>
+                </button>
             </div>
             <div class="input-wrapper">
                 <select name="tipo_documento_personal" required>
@@ -95,30 +92,21 @@
         <div class="form-group">
             <label class="group-label">Tamaño De La Empresa</label>
             <div class="radio-group-horizontal">
-                <label><input type="radio" name="tamano" value="pequena" checked> Pequeña</label>
+                <label><input type="radio" name="tamano" value="pequena" required> Pequeña</label>
                 <label><input type="radio" name="tamano" value="mediana"> Mediana</label>
                 <label><input type="radio" name="tamano" value="grande"> Grande</label>
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="group-label">Etapa De Encadenamiento</label>
-            <div class="radio-group-horizontal">
-                <label><input type="radio" name="etapa" value="produccion" checked> Producción</label>
-                <label><input type="radio" name="etapa" value="transformacion"> Transformación</label>
-                <label><input type="radio" name="etapa" value="comercializacion"> Comercialización</label>
-            </div>
-        </div>
-
-
 
         <div class="form-group">
         <label class="group-label">Sector De Operación</label>
-        <p class="info-text">Selecciona una opción de cada columna que represente el sector en el que opera tu empresa.</p>
+        <p class="info-text">Selecciona una opción de cada columna que represente el sector en el que opera tu empresa.<br>
+                             Si eres transportista o parte de las TIC's, selecciona tu sector de operacion y la opcion que te identifique </p>
         <div class="select-row">
 
             <select name="sector_produccion" required>
-                <option value="" disabled selected>Exploración</option>
+                <option value="" disabled selected>Producción</option>
                 <option value="licencias_exploracion">Licencias de Exploración</option>
                 <option value="exploracion_terrenos">Exploración de Terrenos</option>
                 <option value="perforacion">Perforación</option>
@@ -130,6 +118,8 @@
                 <option value="servicios_ingenieria">Servicios Especializados de Ingeniería y Beneficio</option>
                 <option value="instrumentos_control">Instrumentos de Control y Automatización de Procesos</option>
                 <option value="servicios_seguridad">Prestación de Servicios de Seguridad</option>
+                <option value="transportista">Infraestructura de transporte Especializado interno y externo </option>
+                <option value="tics">Infraestructura y conectividad en tecnologia TIC'S</option>
                 <option value="ninguna">Ninguna de las anteriores</option>
             </select>
 
@@ -146,6 +136,8 @@
                 <option value="industrializacion">Industrialización</option>
                 <option value="recuperacion_valores">Recuperación de Valores y Coquizado</option>
                 <option value="manejo_desechos">Manejo de Desechos Sólidos y Líquidos</option>
+                <option value="transportista">Infraestructura de transporte Especializado interno y externo </option>
+                <option value="tics">Infraestructura y conectividad en tecnologia TIC'S</option>
                 <option value="ninguna">Ninguna de las anteriores</option>
             </select>
 
@@ -157,6 +149,8 @@
                 <option value="mayoristas">Mayoristas</option>
                 <option value="exportadores">Exportadores</option>
                 <option value="usos_finales">Usos Finales (Metalúrgica, Automotriz, etc.)</option>
+                <option value="transportista">Infraestructura de transporte Especializado interno y externo </option>
+                <option value="tics">Infraestructura y conectividad en tecnologia TIC'S</option>
                 <option value="ninguna">Ninguna de las anteriores</option>
             </select>
         </div>
