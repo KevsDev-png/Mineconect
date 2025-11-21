@@ -106,7 +106,6 @@ class Empresario(db.Model):
     numero_documento_contribuyente = db.Column(db.String(30), unique=True, nullable=True) # Para Persona Natural
     nit = db.Column(db.String(30), unique=True, nullable=True) # Para Persona Jurídica
     tamano = db.Column(db.String(20), nullable=False)
-    etapa = db.Column(db.String(30), nullable=False)
     sector_produccion = db.Column(db.String(100), nullable=False)
     sector_transformacion = db.Column(db.String(100), nullable=False)
     sector_comercializacion = db.Column(db.String(100), nullable=False)

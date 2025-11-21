@@ -138,7 +138,6 @@ def registro_empresario():
                 numero_documento_contribuyente=num_doc_contribuyente,
                 nit=nit_contribuyente,
                 tamano=request.form['tamano'],
-                etapa=request.form['etapa'],
                 sector_produccion=request.form['sector_produccion'],
                 sector_transformacion=request.form['sector_transformacion'],
                 sector_comercializacion=request.form['sector_comercializacion']
@@ -154,7 +153,7 @@ def registro_empresario():
             return render_template(
                 'registro_exitoso.html',
                 tipo_cuenta='Empresario',
-                nombre_perfil=nuevo_empresario.nombre_empresa
+                nombre_perfil=nuevo_empresario.nombre_completo
             )
 
         except Exception as e:
@@ -324,7 +323,11 @@ def login():
                     subject="Tu código de verificación de Mineconect",
                     recipients=[usuario.email]
                 )
-                msg.html = render_template('Email/verificacion-codigo.html', code=verification_code)
+                # Obtenemos el perfil para pasar el nombre completo a la plantilla del email.
+                perfil_usuario = usuario.get_perfil()
+                msg.html = render_template('Email/verificacion-codigo.html', 
+                                           code=verification_code, 
+                                           nombre_completo=perfil_usuario.nombre_completo)
                 mail.send(msg)
                 app.logger.info(f"✅ Código de verificación enviado a {usuario.email}")
 

@@ -32,8 +32,10 @@
                 <i class="fas fa-envelope icon-inside"></i>
             </div>
             <div class="input-wrapper">
-                <input type="password" placeholder="Minimo 8 caracteres" name="contrasena" required id="contrasena-emprendedor" maxlength="8">
-                <i class="fas fa-lock icon-inside"></i>
+                <input type="password" placeholder="Mínimo 8 caracteres" name="contrasena" required id="contrasena-emprendedor" maxlength="8">
+                <button type="button" class="password-toggle-btn" onclick="togglePassword()" aria-label="Mostrar u ocultar contraseña">
+                    <i id="eye-icon-emprendedor" class="fas fa-eye-slash"></i>
+                </button>
             </div>
             <div class="input-wrapper">
                 <select name="tipo_documento" required>
