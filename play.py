@@ -435,5 +435,29 @@ def delete_user(email):
         print(f"❌ Error al eliminar el usuario: {e}")
 
 
+
+# --- RUTAS DE EMPRESARIO (Con los nombres de archivo) ---
+
+@app.route('/Empresario-inicio')
+def empresario_inicio():
+    return render_template('Empresario-inicio.html')
+
+@app.route('/Empresario-alianzas')
+def empresario_alianzas():
+    return render_template('Empresario-alianzas.html')
+
+@app.route('/Empresario-convocatorias')
+def empresario_convocatorias():
+    return render_template('Empresario-convocatorias.html')
+
+@app.route('/Empresario-diagnostico')
+def empresario_diagnostico():
+    return render_template('Empresario-diagnostico.html')
+
+@app.route('/Empresario-discusiones')
+def empresario_discusiones():
+    return render_template('Empresario-discusiones.html')
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0' ,port=84,debug= True)

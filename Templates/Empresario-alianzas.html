@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Cluster Platform - Alianzas</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="/static/Css/alianzas.css" rel="stylesheet" />
+    <link href="/static/Css/dashboard.css" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2D572C",
+                        "accent": "#F39C12",
+                        "success": "#76B947",
+                        "danger": "#E74C3C",
+                        "background": "#F4F6F8",
+                        "card-bg": "#FFFFFF",
+                        "text-primary": "#212529",
+                        "text-secondary": "#6C757D",
+                    },
+                    fontFamily: {
+                        "display": ["Montserrat", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display bg-background text-text-primary">
+    <div class="flex h-screen w-full">
+        <aside class="flex h-full w-64 flex-col bg-primary text-white">
+            <div class="flex h-full flex-col justify-between p-4">
+                <div class="flex flex-col gap-6">
+                    <div class="sidebar-brand" style="display: flex; flex-direction: column; align-items: center; padding: 20px 1rem;">
+    <img src="/static/Img/Min.png" alt="Logo Mineconect" style="height: 40px; margin-bottom: 10px;">
+    <span style="color: white; font-weight: bold; font-size: 1.5rem; letter-spacing: 1px;">MINECONECT</span>
+</div>
+                    <nav class="flex flex-col gap-2">
+    <a href="/Empresario-inicio" class="nav-btn flex items-center gap-3 rounded-lg px-4 py-2 hover:bg-white/10 text-white transition-colors">
+        <span class="material-symbols-outlined">home</span>
+        <p class="text-sm font-medium leading-normal">Inicio</p>
+    </a>
+    
+    <a href="/Empresario-diagnostico" class="nav-btn flex items-center gap-3 rounded-lg px-4 py-2 hover:bg-white/10 text-white transition-colors">
+        <span class="material-symbols-outlined">assessment</span>
+        <p class="text-sm font-medium leading-normal">Mi Diagnóstico</p>
+    </a>
+    
+    <a href="/Empresario-alianzas" class="nav-btn flex items-center gap-3 rounded-lg px-4 py-2 hover:bg-white/10 text-white transition-colors">
+        <span class="material-symbols-outlined">groups</span>
+        <p class="text-sm font-medium leading-normal">Alianzas</p>
+    </a>
+    
+    <a href="/Empresario-convocatorias" class="nav-btn flex items-center gap-3 rounded-lg px-4 py-2 hover:bg-white/10 text-white transition-colors">
+        <span class="material-symbols-outlined">campaign</span>
+        <p class="text-sm font-medium leading-normal">Convocatorias</p>
+    </a>
+    
+    <a href="/Empresario-discusiones" class="nav-btn flex items-center gap-3 rounded-lg px-4 py-2 hover:bg-white/10 text-white transition-colors">
+        <span class="material-symbols-outlined">forum</span>
+        <p class="text-sm font-medium leading-normal">Discusiones</p>
+    </a>
+</nav>
+                </div>
+                <div class="flex flex-col gap-1 border-t border-white/20 pt-4">
+                    <a class="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-white/10" href="#">
+                        <span class="material-symbols-outlined">settings</span>
+                        <p class="text-sm font-medium leading-normal">Configuración</p>
+                    </a>
+                    <a class="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-white/10" href="#">
+                        <span class="material-symbols-outlined">logout</span>
+                        <p class="text-sm font-medium leading-normal">Cerrar Sesión</p>
+                    </a>
+                </div>
+            </div>
+        </aside>
+        <div class="flex flex-1 flex-col overflow-hidden">
+            <header class="flex shrink-0 items-center justify-between bg-card-bg px-6 py-3 shadow-sm">
+                <div class="flex items-center gap-8">
+                    <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] text-text-primary">Alianzas</h2>
+                </div>
+                <div class="flex flex-1 items-center justify-end gap-6">
+                    <label class="relative hidden w-full max-w-sm md:block">
+                        <span
+                            class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">search</span>
+                        <input
+                            class="form-input h-10 w-full rounded-lg border-gray-300 bg-background pl-10 text-text-primary placeholder:text-text-secondary focus:border-accent focus:ring-accent"
+                            placeholder="Buscar..." type="search" />
+                    </label>
+                    <button
+                        class="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-background text-text-secondary hover:bg-gray-200">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-danger"></span>
+                    </button>
+                    <div class="flex items-center gap-3">
+                        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                            data-alt="User avatar image"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBKMGmBMv5oIuRLMBvf_CTOm7GoPPj5ATsWRxEtJmUCVZ2_KdX0VebF3pE4v-4Xt7yyQuPgPhES0RRijovTYnK_1OnI9OJN6xr-ta7-KicNQiY9ch9yFc8Kx_WBvtfwSN9AGWfoWkEt0ozY7CD_IxpmIYRbGT-BG2Zp60BhbAsc1YLdHdEC7VpO7ooGHU0uCCRrLgbRVnQNBGrVZdaXmlWvv70JUVOh0NYqKjUvyqZa93Uh-LO8UYzW_6m0MqsLeRMQixcYIRmszF4");'>
+                        </div>
+                        <div class="hidden text-right lg:block">
+                            <p class="text-sm font-semibold text-text-primary">Minera S.A.S</p>
+                            <p class="text-xs text-text-secondary">Empresario</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+<main class="flex-1 overflow-y-auto p-6 bg-background">
+    <div class="mx-auto max-w-none">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <h3 class="text-xl font-bold text-text-primary">Directorio de Aliados Estratégicos</h3>
+            <div class="flex gap-2 w-full md:w-auto">
+                <select class="form-select rounded-lg border-gray-300 text-sm w-full">
+                    <option>Filtrar por Sector</option>
+                    <option>Minería</option>
+                    <option>Logística</option>
+                    <option>Tecnología</option>
+                </select>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="group rounded-lg bg-card-bg p-6 shadow-sm border border-transparent hover:border-accent transition-all hover:shadow-md">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="h-14 w-14 rounded-full bg-blue-100 flex items-center justify-center text-xl font-bold text-blue-600">TS</div>
+                    <div>
+                        <h4 class="font-bold text-text-primary text-lg">TransSolutions</h4>
+                        <p class="text-xs text-text-secondary uppercase tracking-wide">Logística</p>
+                    </div>
+                </div>
+                <p class="text-sm text-text-secondary mb-6 leading-relaxed">Expertos en transporte de carga pesada y manejo de materiales peligrosos.</p>
+                <button class="w-full rounded-lg bg-background text-text-primary py-2.5 text-sm font-bold group-hover:bg-accent group-hover:text-white transition-colors">Ver Perfil</button>
+            </div>
+            <div class="group rounded-lg bg-card-bg p-6 shadow-sm border border-transparent hover:border-accent transition-all hover:shadow-md">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="h-14 w-14 rounded-full bg-orange-100 flex items-center justify-center text-xl font-bold text-orange-600">IM</div>
+                    <div>
+                        <h4 class="font-bold text-text-primary text-lg">Ingeniería Minera</h4>
+                        <p class="text-xs text-text-secondary uppercase tracking-wide">Consultoría</p>
+                    </div>
+                </div>
+                <p class="text-sm text-text-secondary mb-6 leading-relaxed">Asesoría en seguridad industrial, certificaciones ISO y gestión de riesgos.</p>
+                <button class="w-full rounded-lg bg-background text-text-primary py-2.5 text-sm font-bold group-hover:bg-accent group-hover:text-white transition-colors">Ver Perfil</button>
+            </div>
+             <div class="group rounded-lg bg-card-bg p-6 shadow-sm border border-transparent hover:border-accent transition-all hover:shadow-md">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="h-14 w-14 rounded-full bg-purple-100 flex items-center justify-center text-xl font-bold text-purple-600">DT</div>
+                    <div>
+                        <h4 class="font-bold text-text-primary text-lg">DataTech Boyacá</h4>
+                        <p class="text-xs text-text-secondary uppercase tracking-wide">Software</p>
+                    </div>
+                </div>
+                <p class="text-sm text-text-secondary mb-6 leading-relaxed">Desarrollo de software a medida para control de inventarios mineros.</p>
+                <button class="w-full rounded-lg bg-background text-text-primary py-2.5 text-sm font-bold group-hover:bg-accent group-hover:text-white transition-colors">Ver Perfil</button>
+            </div>
+        </div>
+    </div>
+</main>
+        </div>
+    </div>
+</body>
+</html>
