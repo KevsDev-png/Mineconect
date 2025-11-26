@@ -97,6 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const recoveryView = document.getElementById('recovery-view');
         const forgotPasswordLink = document.getElementById('forgot-password-link');
         const backToLoginFromRecoveryBtn = document.getElementById('back-to-login-from-recovery-btn');
+        const recoveryForm = document.getElementById('recoveryForm');
+        const recoveryEmailInput = document.getElementById('recovery-email');
 
         // Comprueba si todos los elementos fueron encontrados. Si falta alguno, detiene la función.
         if (!loginForm || !loginView || !verificationView || !backToLoginBtn || !emailInput || !emailDisplay || !recoveryView || !forgotPasswordLink || !backToLoginFromRecoveryBtn || !verificationForm) {
@@ -168,6 +170,42 @@ document.addEventListener('DOMContentLoaded', () => {
             recoveryView.style.display = 'none'; // Oculta la vista de recuperación.
             loginView.style.display = 'block'; // Muestra la vista de inicio de sesión.
         });
+
+        // Añade un "escuchador" al formulario de recuperación de contraseña.
+        if (recoveryForm) {
+            recoveryForm.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Previene que la página se recargue.
+                const submitButton = recoveryForm.querySelector('button[type="submit"]');
+                const email = recoveryEmailInput.value;
+
+                // Cambiamos el texto del botón y lo deshabilitamos
+                submitButton.disabled = true;
+                submitButton.textContent = 'Enviando...';
+
+                try {
+                    const response = await fetch('/verificador', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email: email }),
+                    });
+
+                    const result = await response.json();
+
+                    // Usamos la función de notificación que ya tienes
+                    showAuthNotification(result.message, result.success ? 'success' : 'error');
+
+                } catch (error) {
+                    console.error('Error en la solicitud de recuperación:', error);
+                    showAuthNotification('Error de conexión con el servidor.', 'error');
+                } finally {
+                    // Restauramos el botón a su estado original
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Enviar Instrucciones';
+                }
+            });
+        }
 
         // Añade un "escuchador" al formulario de verificación
         verificationForm.addEventListener('submit', async (event) => {

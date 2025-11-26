@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 import click # Importar click para los comandos CLI
 import logging
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature
 from flask_mail import Mail, Message # Importar Flask-Mail
 import random # Para generar el código
 from datetime import datetime, timedelta, timezone
@@ -43,6 +44,10 @@ db.init_app(app)
 mail = Mail(app)
 # Configurar Flask-Migrate
 migrate = Migrate(app, db)
+
+# --- Configuración del Serializer para tokens seguros ---
+# Usamos la SECRET_KEY para firmar los tokens
+s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 # ✅ Prueba de conexión a la base de datos
 with app.app_context():
@@ -379,6 +384,73 @@ def verify_code():
         return jsonify({'success': True, 'message': f'¡Bienvenido de nuevo, {usuario.get_perfil().nombre_completo}!'})
     else:
         return jsonify({'success': False, 'message': 'El código de verificación es incorrecto.'}), 400
+
+@app.route('/verificador', methods=['POST'])
+def verificador_password_reset():
+    data = request.get_json()
+    email = data.get('email')
+
+    if not email:
+        return jsonify({'success': False, 'message': 'El correo es requerido.'}), 400
+
+    usuario = db.session.execute(db.select(Usuario).filter_by(email=email)).scalar_one_or_none()
+
+    # Por seguridad, no revelamos si el usuario existe o no.
+    if usuario:
+        try:
+            # Generamos un token con el email, válido por 1 hora (3600 segundos)
+            token = s.dumps(usuario.email, salt='password-reset-salt')
+            reset_url = url_for('reset_with_token', token=token, _external=True)
+
+            msg = Message(
+                "Restablece tu contraseña de Mineconect",
+                recipients=[usuario.email]
+            )
+            # Usamos la plantilla para el correo que solicitaste
+            msg.html = render_template('Email/solicitud_reset_password.html', reset_url=reset_url, nombre_completo=usuario.get_perfil().nombre_completo)
+            mail.send(msg)
+            app.logger.info(f"✅ Correo de reseteo de contraseña enviado a {usuario.email}")
+
+        except Exception as e:
+            app.logger.error(f"❌ Error al enviar correo de reseteo: {e}")
+            # No informamos al usuario del error para no dar pistas a posibles atacantes.
+
+    # Siempre devolvemos un mensaje genérico de éxito.
+    return jsonify({'success': True, 'message': 'Si tu correo está registrado, recibirás instrucciones para restablecer tu contraseña.'})
+
+
+
+@app.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_with_token(token):
+    try:
+        # Verificamos el token y su tiempo de expiración (10 minutos)
+        email = s.loads(token, salt='password-reset-salt', max_age=600)
+    except (SignatureExpired, BadTimeSignature):
+        flash('El enlace de recuperación ha expirado o es inválido. Por favor, solicita uno nuevo.', 'danger')
+        return redirect(url_for('Principal'))
+
+    usuario = db.session.execute(db.select(Usuario).filter_by(email=email)).scalar_one_or_none()
+    if not usuario:
+        flash('Usuario no encontrado.', 'danger')
+        return redirect(url_for('Principal'))
+
+    if request.method == 'POST':
+        nueva_contrasena = request.form.get('new_password')
+        confirmar_contrasena = request.form.get('confirm_password')
+
+        if nueva_contrasena != confirmar_contrasena:
+            # Cambiado para devolver JSON en caso de error
+            return jsonify({'success': False, 'message': 'Las contraseñas no coinciden.'}), 400
+
+        usuario.set_password(nueva_contrasena)
+        db.session.commit()
+        
+        # Cambiado para devolver JSON en caso de éxito
+        app.logger.info(f"✅ Contraseña actualizada para {email}")
+        return jsonify({'success': True, 'message': '¡Se cambió la contraseña con éxito!'})
+
+    # Para peticiones GET, mostramos el formulario pasándole el token
+    return render_template('Email/contraseña_recovery.html', token=token)
 
 # --- Comandos CLI para administración ---
 
