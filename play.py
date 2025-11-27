@@ -459,5 +459,10 @@ def empresario_discusiones():
     return render_template('Empresario-discusiones.html')
 
 
+@app.route('/Empresario-mensajes')
+def empresario_mensajes():
+    return render_template('Empresario-mensajes.html')
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0' ,port=84,debug= True)
