@@ -173,7 +173,7 @@ def registro_empresario():
 def registro_institucion():
     if request.method == 'POST':
         try:
-            # --- PASO 0: VALIDACIÓN PREVIA ---
+            # --- PASO 0: VALIDACIÓN PREVIA DEL CORREO---
             correo = request.form['correo']
             nit = request.form['nit']
             errors = {} # Creamos un diccionario para guardar los errores
